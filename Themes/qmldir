@@ -1,0 +1,3 @@
+module Themes
+
+singleton ColorThemes 0.1 ColorThemes_01.qml
