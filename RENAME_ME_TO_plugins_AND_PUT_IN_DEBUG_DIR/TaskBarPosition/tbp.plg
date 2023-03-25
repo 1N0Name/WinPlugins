@@ -1,0 +1,10 @@
+{
+	"plugin": {
+		"name": "TBP",
+		"description": "Some other plugin with long description and something else",
+		"version": "1.0",
+		"imgPath": "qrc:/plugin1.png",
+		"storePath": "tempstr",
+		"settingsPath": "tempstr"
+	}
+}

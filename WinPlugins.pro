@@ -5,7 +5,10 @@ QT += quick
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        appcore.cpp \
+        main.cpp \
+        modelpluginselection.cpp \
+        plugin.cpp
 
 RESOURCES += qml.qrc \
     images.qrc
@@ -20,3 +23,9 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    GlobalParameters.h \
+    appcore.h \
+    modelpluginselection.h \
+    plugin.h

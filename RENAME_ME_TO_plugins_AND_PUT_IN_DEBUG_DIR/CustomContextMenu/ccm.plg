@@ -1,0 +1,10 @@
+{
+	"plugin": {
+		"name": "CCM",
+		"description": "Custom context menu plugin",
+		"version": "1.0",
+		"imgPath": "qrc:/plugin1.png",
+		"storePath": "tempstr",
+		"settingsPath": "tempstr"
+	}
+}

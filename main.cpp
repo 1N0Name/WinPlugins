@@ -1,8 +1,10 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QLoggingCategory>
-
-#define PR_DEBUG 1
+#include <GlobalParameters.h>
+#include <modelpluginselection.h>
+#include <appcore.h>
 
 int main(int argc, char *argv[])
 {
@@ -35,6 +37,14 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+
+    Appcore appcore;
+
+    ModelPluginSelection plugins;
+    plugins.updateFromFileSystem();
+
+    engine.rootContext()->setContextProperty("appcore", &appcore);
+    engine.rootContext()->setContextProperty("plugins", &plugins);
 
     return app.exec();
 }

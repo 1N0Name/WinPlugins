@@ -106,7 +106,7 @@ Rectangle {
             }
         }        
 
-        model: ListModel {
+       /* model: ListModel {
             id: pluginsModel
 
             ListElement {
@@ -124,7 +124,9 @@ Rectangle {
                 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis auctor magna.Fusce congue finibus enim, a dictum justo consectetur sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet lacus auctor turpis scelerisque fermentum quis a nisi. Duis vulputate ullamcorper ex, a rhoncus lacus ullamcorper euismod. Pellentesque et neque at"
                 pluginPreviewSource: "qrc:/plugin1.png"
             }
-        }
+        }*/
+
+        model: plugins
 
         delegate: Component {
             Rectangle {
@@ -150,7 +152,7 @@ Rectangle {
 
                         Text {
                             id: pluginTitle
-                            text: title
+                            text: name//title
                             font.pointSize: 12
                             font.bold: true
                             color: "#fff"
@@ -188,7 +190,7 @@ Rectangle {
                     Image {
                         id: pluginPreview
 
-                        source: pluginPreviewSource
+                        source: imgPath
 
                         Layout.fillWidth: true
                         Layout.fillHeight: true

@@ -1,0 +1,6 @@
+#ifndef GLOBALPARAMETERS_H
+#define GLOBALPARAMETERS_H
+
+#define PR_DEBUG 1
+
+#endif // GLOBALPARAMETERS_H
