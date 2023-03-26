@@ -1,4 +1,5 @@
-QT += quick
+QT += quick \
+      testlib
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -8,7 +9,10 @@ SOURCES += \
         appcore.cpp \
         main.cpp \
         modelpluginselection.cpp \
-        plugin.cpp
+        plugin.cpp \
+        regapi.cpp \
+        regkey.cpp \
+        tests/regApiTest.cpp
 
 RESOURCES += qml.qrc \
     images.qrc
@@ -28,4 +32,7 @@ HEADERS += \
     GlobalParameters.h \
     appcore.h \
     modelpluginselection.h \
-    plugin.h
+    plugin.h \
+    regapi.h \
+    regkey.h \
+    tests/regapitest.h

@@ -34,13 +34,6 @@ int ModelPluginSelection::columnCount(const QModelIndex &parent) const
     return Model_Plugins_Column_Count;
 }
 
-#if PR_DEBUG
-void ModelPluginSelection::populate()
-{
-
-}
-#endif
-
 QVariant ModelPluginSelection::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
@@ -71,7 +64,7 @@ void ModelPluginSelection::clear()
     emit modelChanged();
 }
 
-void ModelPluginSelection::add(Plugin plg)
+void ModelPluginSelection::append(Plugin plg)
 {
     int index = m_plugins.length();
     beginInsertRows(QModelIndex(), index, index);
@@ -80,7 +73,7 @@ void ModelPluginSelection::add(Plugin plg)
     emit modelChanged();
 }
 
-bool ModelPluginSelection::isEmpty()
+bool ModelPluginSelection::isEmpty() const
 {
     return m_plugins.empty();
 }
@@ -126,6 +119,7 @@ bool ModelPluginSelection::isEmpty()
 
 void ModelPluginSelection::updateFromFileSystem()
 {
+    this->clear();
     if(dirExists("plugins") == 0) mkdir("plugins");
 
     QDirIterator it(QDir::currentPath() + "/plugins", {"*.plg"}, QDir::Files, QDirIterator::Subdirectories);
@@ -133,7 +127,28 @@ void ModelPluginSelection::updateFromFileSystem()
     while(it.hasNext())
     {
         QFile JSONfile(it.next());
-        this->add(getPluginFromJSON(JSONfile));
+        this->append(getPluginFromJSON(JSONfile));
     }
 }
+
+QList<Plugin> ModelPluginSelection::getPlugins()
+{
+    return m_plugins;
+}
+
+#if PR_DEBUG
+void ModelPluginSelection::populate(int repeats)
+{
+    for(int i = 0 ; i < repeats; i++)
+    {
+        QDirIterator it(QDir::currentPath() + "/plugins", {"*.plg"}, QDir::Files, QDirIterator::Subdirectories);
+
+        while(it.hasNext())
+        {
+            QFile JSONfile(it.next());
+            this->append(getPluginFromJSON(JSONfile));
+        }
+    }
+}
+#endif
 
