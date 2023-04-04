@@ -2,6 +2,6 @@
 #define GLOBALPARAMETERS_H
 
 #define PR_DEBUG 1
-#define PR_UNITS 1
+#define PR_UNITS 0
 
 #endif // GLOBALPARAMETERS_H

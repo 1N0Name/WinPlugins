@@ -5,6 +5,6 @@
 		"version": "1.0",
 		"imgPath": "qrc:/plugin1.png",
 		"storePath": "tempstr",
-		"settingsPath": "tempstr"
+		"settingsPath": "CCM.qml"
 	}
 }

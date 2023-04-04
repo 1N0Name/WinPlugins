@@ -16,6 +16,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     /* -------------------------------------------------------------------------- */
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("WinPlugins");
+    app.setApplicationName("WinPlugins");
     QQmlApplicationEngine engine; 
 
 /* ------------------------ Turn on/off QML logging. ------------------------ */
@@ -40,8 +42,10 @@ int main(int argc, char *argv[])
     engine.load(url);
     Appcore appcore;
     ModelPluginSelection plugins;
+
 #if PR_DEBUG
-    plugins.populate(20);
+    //plugins.populate(20);
+    plugins.updateFromFileSystem();
 #else
     plugins.updateFromFileSystem();
 #endif
