@@ -20,7 +20,7 @@ QHash<int, QByteArray> ModelPluginSelection::roleNames() const
     roles[VersionRole] = "version";
     roles[ImgPathRole] = "imgPath";
     roles[StorePathRole] = "storePath";
-    roles[SettingsPathRole] = "settingPath";
+    roles[SettingsPathRole] = "settingsPath";
     return roles;
 }
 
@@ -33,13 +33,6 @@ int ModelPluginSelection::columnCount(const QModelIndex &parent) const
 {
     return Model_Plugins_Column_Count;
 }
-
-#if PR_DEBUG
-void ModelPluginSelection::populate()
-{
-
-}
-#endif
 
 QVariant ModelPluginSelection::data(const QModelIndex &index, int role) const
 {
@@ -71,7 +64,7 @@ void ModelPluginSelection::clear()
     emit modelChanged();
 }
 
-void ModelPluginSelection::add(Plugin plg)
+void ModelPluginSelection::append(Plugin plg)
 {
     int index = m_plugins.length();
     beginInsertRows(QModelIndex(), index, index);
@@ -80,7 +73,7 @@ void ModelPluginSelection::add(Plugin plg)
     emit modelChanged();
 }
 
-bool ModelPluginSelection::isEmpty()
+bool ModelPluginSelection::isEmpty() const
 {
     return m_plugins.empty();
 }
@@ -111,21 +104,26 @@ bool ModelPluginSelection::isEmpty()
     auto rootObj = plgJSON.object();
     auto plgObj = rootObj.value(QString("plugin")).toObject();
 
+    QFileInfo JSONinfo(JSONfile);
+    QString settingsPath = "file:///" + JSONinfo.absolutePath() + "/" + plgObj["settingsPath"].toString();
+
 #if PR_DEBUG
     qDebug() << plgObj["name"].toString() ;
     qDebug() << plgObj["description"].toString();
     qDebug() << plgObj["version"].toString();
     qDebug() << plgObj["imgPath"].toString();
     qDebug() << plgObj["storePath"].toString();
-    qDebug() << plgObj["settingsPath"].toString();
+    //qDebug() << plgObj["settingsPath"].toString();
+    qDebug() << settingsPath;
 #endif
 
     return Plugin(plgObj["name"].toString(), plgObj["description"].toString(), plgObj["version"].toString(),
-            plgObj["imgPath"].toString(), plgObj["storePath"].toString(), plgObj["settingsPath"].toString());
+            plgObj["imgPath"].toString(), plgObj["storePath"].toString(), settingsPath);
 }
 
 void ModelPluginSelection::updateFromFileSystem()
 {
+    this->clear();
     if(dirExists("plugins") == 0) mkdir("plugins");
 
     QDirIterator it(QDir::currentPath() + "/plugins", {"*.plg"}, QDir::Files, QDirIterator::Subdirectories);
@@ -133,7 +131,28 @@ void ModelPluginSelection::updateFromFileSystem()
     while(it.hasNext())
     {
         QFile JSONfile(it.next());
-        this->add(getPluginFromJSON(JSONfile));
+        this->append(getPluginFromJSON(JSONfile));
     }
 }
+
+QList<Plugin> ModelPluginSelection::getPlugins()
+{
+    return m_plugins;
+}
+
+#if PR_DEBUG
+void ModelPluginSelection::populate(int repeats)
+{
+    for(int i = 0 ; i < repeats; i++)
+    {
+        QDirIterator it(QDir::currentPath() + "/plugins", {"*.plg"}, QDir::Files, QDirIterator::Subdirectories);
+
+        while(it.hasNext())
+        {
+            QFile JSONfile(it.next());
+            this->append(getPluginFromJSON(JSONfile));
+        }
+    }
+}
+#endif
 

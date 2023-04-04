@@ -7,5 +7,6 @@
         <file>Themes/ColorThemes_01.qml</file>
         <file>Themes/qmldir</file>
         <file>assets/fonts/Montserrat-Regular.ttf</file>
+        <file>qml/pages/PluginPage.qml</file>
     </qresource>
 </RCC>

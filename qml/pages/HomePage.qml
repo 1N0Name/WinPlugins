@@ -167,6 +167,10 @@ Rectangle {
 
                             Layout.fillWidth: true
                             Layout.fillHeight: true
+                            onClicked: {
+                                pluginPage.pluginPath = settingsPath
+                                stackLayout.currentIndex = 1
+                            }
                         }
                     }
 

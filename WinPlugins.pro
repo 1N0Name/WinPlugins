@@ -1,4 +1,19 @@
-QT += quick
+QT += quick \
+
+CONFIG(release, debug|release){
+    # code for Release builds
+}
+else{
+    # code for Debug builds
+    QT += testlib
+    SOURCES += tests/regApiTest.cpp
+    HEADERS += tests/regapitest.h
+    copydata.commands = $(COPY_DIR) $$shell_path($$PWD/DistPkg) $$shell_path($$OUT_PWD)
+    first.depends = $(first) copydata
+    export(first.depends)
+    export(copydata.commands)
+    QMAKE_EXTRA_TARGETS += first copydata
+}
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -8,7 +23,9 @@ SOURCES += \
         appcore.cpp \
         main.cpp \
         modelpluginselection.cpp \
-        plugin.cpp
+        plugin.cpp \
+        regapi.cpp \
+        regkey.cpp
 
 RESOURCES += qml.qrc \
     images.qrc
@@ -28,4 +45,6 @@ HEADERS += \
     GlobalParameters.h \
     appcore.h \
     modelpluginselection.h \
-    plugin.h
+    plugin.h \
+    regapi.h \
+    regkey.h

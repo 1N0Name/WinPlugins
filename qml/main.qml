@@ -151,7 +151,7 @@ Window {
                     Image {
                         id: appLogoImage
 
-                        source:                             "../images/svg/app_logo.svg"
+                        source:                             "qrc:/assets/images/icons/logo.png"
                         fillMode:                           Image.PreserveAspectFit
                         mipmap:                             true
 
@@ -163,7 +163,7 @@ Window {
                     ColorOverlay {
                         anchors.fill:                       appLogoImage
                         source:                             appLogoImage
-                        color:                              ColorThemes.iconColor
+                        //color:                              ColorThemes.iconColor
                         antialiasing:                       true
                     }
 
@@ -405,6 +405,9 @@ Window {
 
                         HomePage {
                             id: homePage
+                        }
+                        PluginPage {
+                            id: pluginPage
                         }
                     }
                 }
