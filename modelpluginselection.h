@@ -21,18 +21,20 @@ public:
         VersionRole,
         ImgPathRole,
         StorePathRole,
-        SettingsPathRole
+        SettingsPathRole,
+        PriceRole,
+        CategoryRole
     };
 
     /* ------------------------ Q_INVOKABLES ------------------------ */
     /*Return the number of rows in model*/
     Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     /*Removes plugin at position <index>*/
-    Q_INVOKABLE void removeAt(int index);
+    Q_INVOKABLE void removeAt(int);
     /*Removes all plugins from model*/
     Q_INVOKABLE void clear();
     /*Appends plugin <plg> to model*/
-    Q_INVOKABLE void append(Plugin plg);
+    Q_INVOKABLE void append(Plugin);
     /*Returns true if model is empty, else returns false*/
     Q_INVOKABLE bool isEmpty() const;
     /*Updates model from *.plg files in folder named <plugins>*/
@@ -41,7 +43,7 @@ public:
     Q_INVOKABLE QList<Plugin> getPlugins();
     /* ------------------------ QAbstractListModel Methods ------------------------ */
     QHash<int, QByteArray> roleNames() const override;
-    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant data(const QModelIndex &, int) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 #ifdef PR_DEBUG
     void populate(int repeats);

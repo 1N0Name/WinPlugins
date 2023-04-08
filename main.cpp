@@ -6,6 +6,8 @@
 
 #include "appcore.h"
 #include "modelpluginselection.h"
+#include "modelsortplugins.h"
+
 #ifdef PR_UNITS
     #include "tests/regapitest.h"
 #endif
@@ -43,8 +45,13 @@ int main(int argc, char *argv[])
 
     ModelPluginSelection plugins;
     plugins.updateFromFileSystem();
-    plugins.populate(5);
+    ModelSortPlugins filteredPlugins;
+    filteredPlugins.setSourceModel(&plugins);
+    //filteredPlugins.setFilterRegularExpression("");
+    //filteredPlugins.setFilterFixedString("TBP");
+    //plugins.populate(5);
     engine.rootContext()->setContextProperty("plugins", &plugins);
+    engine.rootContext()->setContextProperty("filteredPlugins", &filteredPlugins);
 
 #ifdef PR_UNITS
     QTest::qExec(new RegApiTest, argc, argv);

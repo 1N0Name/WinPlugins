@@ -62,8 +62,14 @@ Rectangle {
             CustomComboBox {
                 model: ListModel {
                     id: categoryModel
-                    ListElement { text: "Контекстное меню" }
-                    ListElement { text: "Таскбар" }
+                    ListElement { text: "Контекстное меню"; category: "context"}
+                    ListElement { text: "Таскбар"; category: "taskbar" }
+                }
+                textRole: "text"
+                onCurrentIndexChanged:
+                {
+                    //console.log(currentIndex.category);
+                    filteredPlugins.categoryFilter = "";
                 }
             }
 
@@ -207,7 +213,7 @@ Rectangle {
             }
         }
 
-        model: plugins
+        model: filteredPlugins
 
         delegate: Component {
             Rectangle {
@@ -262,7 +268,7 @@ Rectangle {
                             Layout.fillHeight: true
 
                             Text {
-                                   text: qsTr("Price")
+                                   text: price
                                    color: ColorThemes.helperText
                                    anchors.centerIn: parent
                             }

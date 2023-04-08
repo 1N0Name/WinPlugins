@@ -16,6 +16,9 @@ TextField {
         selectByMouse:                                              true
 
         leftPadding:                                                textFieldIcon.anchors.leftMargin * 3 + textFieldIcon.width + 1.01
+        onTextChanged: {
+            filteredPlugins.nameFilter = text;
+        }
 
         // Placeholder text.
         Text {

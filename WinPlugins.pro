@@ -9,7 +9,27 @@ DEFINES += \
     PR_DEBUG \
 #    PR_UNITS
 
-CONFIG(release, debug|release){
+# Recursive remove directory
+defineTest(removeDirRecursive) {
+    DIR_TO_DEL = $$shell_path($$1)
+    RETURN = $$escape_expand(\n\t)
+    QMAKE_POST_LINK += $$RETURN $$QMAKE_DEL_TREE $$quote($$DIR_TO_DEL)
+    export(QMAKE_POST_LINK)
+}
+
+# create directory if not exist, then copy some files to that directory
+defineTest(copyFilesToDir) {
+    COPY_DIR = $$shell_path($$1)
+    DIR = $$shell_path($$2)
+    RETURN = $$escape_expand(\n\t)
+    QMAKE_POST_LINK += $$RETURN $$sprintf($$QMAKE_MKDIR_CMD, $$DIR)
+    QMAKE_POST_LINK += $$RETURN $$QMAKE_COPY_DIR $$quote($$COPY_DIR) $$quote($$DIR)
+    export(QMAKE_POST_LINK)
+}
+
+copyFilesToDir(some/*.dll, $$DESTDIR/other)
+
+CONFIG(release, debug|release) {
     # code for Release builds
 } else {
     # code for Debug builds
@@ -17,10 +37,13 @@ CONFIG(release, debug|release){
     SOURCES += tests/regApiTest.cpp
     HEADERS += tests/regapitest.h
 
-    CONFIG += file_copies
-    COPIES += plugins
-    plugins.files = $$files(DistPkg/*)
-    plugins.path = $$OUT_PWD
+    removeDirRecursive($$OUT_PWD/plugins)
+    copyFilesToDir($$PWD/DistPkg, $$OUT_PWD)
+
+#    CONFIG += file_copies
+#    COPIES += plugins
+#    plugins.files = $$files(DistPkg/*)
+#    plugins.path = $$OUT_PWD
 }
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -31,6 +54,7 @@ SOURCES += \
         appcore.cpp \
         main.cpp \
         modelpluginselection.cpp \
+        modelsortplugins.cpp \
         plugin.cpp \
         regapi.cpp
 
@@ -54,5 +78,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     appcore.h \
     modelpluginselection.h \
+    modelsortplugins.h \
     plugin.h \
     regapi.h

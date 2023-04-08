@@ -21,6 +21,8 @@ QHash<int, QByteArray> ModelPluginSelection::roleNames() const
     roles[ImgPathRole]      = "imgPath";
     roles[StorePathRole]    = "storePath";
     roles[SettingsPathRole] = "settingsPath";
+    roles[PriceRole]        = "price";
+    roles[CategoryRole]     = "category";
     return roles;
 }
 
@@ -52,6 +54,10 @@ QVariant ModelPluginSelection::data(const QModelIndex &index, int role) const
         return plg.storePath();
     if(role == SettingsPathRole)
         return plg.settingsPath();
+    if(role == PriceRole)
+        return plg.price();
+    if(role == CategoryRole)
+        return plg.category();
 
     return QVariant();
 }
@@ -123,11 +129,14 @@ bool ModelPluginSelection::isEmpty() const
     qDebug() << "Image Preview Path:\t" << plgObj["imgPath"].toString();
     qDebug() << "Preview Page Path:\t" << plgObj["storePath"].toString();
     qDebug() << "Settings Page Path:\t" << settingsPath;
+    qDebug() << "Plugin Price:\t" << plgObj["price"].toDouble();
+    qDebug() << "Plugin Category:\t" << plgObj["category"].toString();
     qDebug() << "/ -------------------------------------------------------------------------- /\n";
 #endif
 
     return Plugin(plgObj["name"].toString(), plgObj["description"].toString(), plgObj["version"].toString(),
-            plgObj["imgPath"].toString(), plgObj["storePath"].toString(), settingsPath);
+                  plgObj["imgPath"].toString(), plgObj["storePath"].toString(), settingsPath,
+                  plgObj["price"].toDouble(), plgObj["category"].toString());
 }
 
 void ModelPluginSelection::updateFromFileSystem()
