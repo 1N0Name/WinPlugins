@@ -1,5 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import Qt5Compat.GraphicalEffects
 
 import Themes 0.1
@@ -55,24 +56,25 @@ ComboBox {
     }
 
     contentItem: Item {
-        width: root.background.width - root.indicator.width - 10
-        height: root.background.height
+        height: root.height
 
         Text {
-            anchors.verticalCenter: parent.verticalCenter
-            x: 10
+            width: root.width - canvas.width - leftPadding - 5
+            height: root.height
+            leftPadding: 10
+            verticalAlignment: Text.AlignVCenter
             text: root.displayText
             elide: Text.ElideRight
 
             font.pixelSize: 15
             font.family: "Arial"
-            font.weight: Font.Thin
             color: root.down ? ColorThemes.helperText : ColorThemes.highEmphasisText
         }
     }
 
     background: Rectangle {
-        implicitWidth: 130
+        id: rootBG
+        implicitWidth: 140
         implicitHeight: 40
         color: root.down ? root.activeColor : root.inActiveColor
         radius: 5

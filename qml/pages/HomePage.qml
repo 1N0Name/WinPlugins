@@ -1,9 +1,7 @@
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.5
 import Qt5Compat.GraphicalEffects
-import QtQuick.Controls.Material 2.3
-
 import Themes 0.1
 
 import "../controls/"
@@ -36,21 +34,26 @@ Rectangle {
     Rectangle {
         id:controlPanel
         color: ColorThemes.transparent
-        height: 30
+        height: 40
 
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
 
-        anchors.leftMargin: pluginsGridView.anchors.leftMargin
-        anchors.rightMargin: vbar.width + pluginsGridView.anchors.rightMargin
-
         RowLayout {
             spacing: 10
 
+            anchors.fill: parent
+            anchors.topMargin: 10
+            anchors.leftMargin: pluginsGridView.anchors.leftMargin
+            anchors.rightMargin: vbar.width + pluginsGridView.anchors.rightMargin
+
+
             SearchBar {
                 id: searchField
+
                 Layout.preferredWidth: 320
+                Layout.fillHeight: true
             }
 
             Text {
@@ -60,6 +63,7 @@ Rectangle {
             }
 
             CustomComboBox {
+                Layout.fillHeight: true
                 model: ListModel {
                     id: categoryModel
                     ListElement { text: "Контекстное меню"; category: "context"}
@@ -80,12 +84,17 @@ Rectangle {
             }
 
             CustomComboBox {
+                Layout.fillHeight: true
                 model: ListModel {
                     id: priceModel
                     ListElement { text: "Бесплатные" }
                     ListElement { text: "Все" }
                 }
             }
+
+           Item {
+               Layout.fillWidth: true
+           }
         }
     }
 
@@ -323,17 +332,22 @@ Rectangle {
                     NumberAnimation { duration: 75 }
                 }
 
+                property int y_pos: -1
+
                 MouseArea {
                     anchors.fill: parent
-
                     hoverEnabled: true
 
+                    cursorShape: Qt.PointingHandCursor
+
                     onEntered: {
-                        pluginDelegate.y += 3
+                        if (y_pos === -1)
+                            y_pos = pluginDelegate.y
+                        pluginDelegate.y = y_pos + 3
                     }
 
                     onExited: {
-                        pluginDelegate.y -= 3
+                        pluginDelegate.y = y_pos
                     }
 
                     onClicked: {

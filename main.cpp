@@ -47,9 +47,9 @@ int main(int argc, char *argv[])
     plugins.updateFromFileSystem();
     ModelSortPlugins filteredPlugins;
     filteredPlugins.setSourceModel(&plugins);
-    //filteredPlugins.setFilterRegularExpression("");
-    //filteredPlugins.setFilterFixedString("TBP");
-    //plugins.populate(5);
+
+    plugins.updateFromFileSystem();
+
     engine.rootContext()->setContextProperty("plugins", &plugins);
     engine.rootContext()->setContextProperty("filteredPlugins", &filteredPlugins);
 
