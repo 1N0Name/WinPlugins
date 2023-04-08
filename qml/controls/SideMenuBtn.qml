@@ -6,7 +6,7 @@ import Qt5Compat.GraphicalEffects
 import Themes 0.1
 
 Button {
-    id: btn
+    id: root
     text: qsTr("")
     visible:                                                                enabled? true : false
 
@@ -23,29 +23,38 @@ Button {
     QtObject {
         id: internal
 
-        property var dynamicColor: if(btn.down) {
-                                       if(btn.down) {
-                                           ColorThemes.btnColorClicked
-                                       } else {
-                                           isActive ? ColorThemes.btnColorActive : ColorThemes.btnColorDefault
-                                       }
-                                   } else {
-                                       if(btn.hovered) {
-                                           ColorThemes.btnColorActive
-                                       } else {
-                                           isActive ? ColorThemes.btnColorActive : ColorThemes.btnColorDefault
-                                       }
-                                   }
+        property var buttonDynamicColor:    if(root.down) {
+                                               if(root.down) {
+                                                   ColorThemes.layer_05
+                                               } else {
+                                                   isActive ? ColorThemes.layer_02 : ColorThemes.layer_01
+                                               }
+                                            } else {
+                                               if(root.hovered) {
+                                                   ColorThemes.layer_04
+                                               } else {
+                                                   isActive ? ColorThemes.layer_02 : ColorThemes.layer_01
+                                               }
+                                            }
+
+        property var iconDynamicColor:      if (isActive) {
+                                                ColorThemes.activeIcon
+                                            } else {
+                                                ColorThemes.inActiveIcon
+                                            }
+
     }
 
     implicitWidth:                                                          bgContainerWidth
     implicitHeight:                                                         bgContainerHeight
 
     ColorOverlay {
-        color:                                                              "#ffffff"
         anchors.fill:                                                       iconBtn
-
         source:                                                             iconBtn
+
+        color:                                                              internal.iconDynamicColor
+
+        antialiasing:                                                       true
     }
 
     Image {
@@ -62,7 +71,7 @@ Button {
 
     background: Rectangle {
         id: bg
-        color:                                                              internal.dynamicColor
+        color:                                                              internal.buttonDynamicColor
 
         radius:                                                             5
 
@@ -85,10 +94,10 @@ Button {
 
     contentItem: Text {
         id: contentText
-        color:                                                              "#ffffff"
+        color:                                                              ColorThemes.highEmphasisText
 
-        text:                                                               btn.text
-        font:                                                               btn.font
+        text:                                                               root.text
+        font:                                                               root.font
 
         anchors.left:                                                       parent.left
         anchors.leftMargin:                                                 50

@@ -6,24 +6,99 @@ import QtQuick.Controls.Material 2.3
 
 import Themes 0.1
 
+import "../controls/"
+
 Rectangle {
     id: background
-    color: ColorThemes.pageBackgroundColor
+    color: ColorThemes.layer_02
     radius: 10
 
-    clip: true
+    /* -------------------- Internal properties / functions. -------------------- */
+    QtObject {
+        id: internal
+
+        function toggleScrollBar() {
+            if(vbar.hovered) {
+//                vbarIndicator.width     = vbar.width - vbar.contentItemOffset
+                vbarBG.opacity          = 1
+                vbarUpArrow.opacity     = 1
+                vbarDownArrow.opacity   = 1
+            } else if (!vbar.pressed) {
+//                vbarIndicator.width     = vbar.width / 2
+                vbarBG.opacity          = 0
+                vbarUpArrow.opacity     = 0
+                vbarDownArrow.opacity   = 0
+            }
+        }
+    }
+    /* -------------------------------------------------------------------------- */
+
+    Rectangle {
+        id:controlPanel
+        color: ColorThemes.transparent
+        height: 30
+
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        anchors.leftMargin: pluginsGridView.anchors.leftMargin
+        anchors.rightMargin: vbar.width + pluginsGridView.anchors.rightMargin
+
+        RowLayout {
+            spacing: 10
+
+            SearchBar {
+                id: searchField
+                Layout.preferredWidth: 320
+            }
+
+            Text {
+                text: qsTr("Категория: ")
+                color: ColorThemes.highEmphasisText
+                font.pointSize: 12
+            }
+
+            CustomComboBox {
+                model: ListModel {
+                    id: categoryModel
+                    ListElement { text: "Контекстное меню" }
+                    ListElement { text: "Таскбар" }
+                }
+            }
+
+            Text {
+                text: qsTr("Стоимость: ")
+                color: ColorThemes.highEmphasisText
+                font.pointSize: 12
+            }
+
+            CustomComboBox {
+                model: ListModel {
+                    id: priceModel
+                    ListElement { text: "Бесплатные" }
+                    ListElement { text: "Все" }
+                }
+            }
+        }
+    }
 
     GridView {
         id: pluginsGridView
 
-        anchors.fill: parent
+        anchors.top: controlPanel.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.leftMargin: 10
         anchors.rightMargin: 5
         anchors.topMargin: 10
         anchors.bottomMargin: 10
 
-        readonly property int defaultCellWidth: 300
-        readonly property int defaultCellHeight: 275
+        clip: true
+
+        readonly property int defaultCellWidth: 250
+        readonly property int defaultCellHeight: 225
 
         cellWidth: Math.floor(width / Math.floor(width / defaultCellWidth))
         cellHeight: Math.floor((cellWidth / defaultCellWidth) * defaultCellHeight)
@@ -36,28 +111,51 @@ Rectangle {
         ScrollBar.vertical: ScrollBar {
             id: vbar
 
+            property int contentItemOffset: 4
+
             width: 12
 
             topPadding: width + 10
             bottomPadding: width + 10
 
             contentItem: Rectangle {
-                color: "#aaa"
+                id: vbarIndicator
+                color: "#5A5A5A"
                 radius: 10
+
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             background: Rectangle {
-                color: "#f3f3f3"
+                id: vbarBG
+                color: ColorThemes.layer_04
                 radius: 10
+
+                opacity: 0
+
+                Behavior on opacity {
+                    NumberAnimation { duration: 100 }
+                }
+            }
+
+            onHoveredChanged: {
+                internal.toggleScrollBar()
+            }
+
+            onPressedChanged: {
+                internal.toggleScrollBar()
             }
 
             Image {
+                id: vbarUpArrow
                 source: 'qrc:/up_arrow.svg'
                 sourceSize: Qt.size(parent.width - 4, parent.width)
 
                 anchors.top: parent.top
                 anchors.topMargin: 5
                 anchors.horizontalCenter: parent.horizontalCenter
+
+                opacity: 0
 
                 MouseArea {
                     id: upButton
@@ -79,12 +177,15 @@ Rectangle {
             }
 
             Image {
+                id: vbarDownArrow
                 source: 'qrc:/down_arrow.svg'
                 sourceSize: Qt.size(parent.width - 4, parent.width)
 
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 5
                 anchors.horizontalCenter: parent.horizontalCenter
+
+                opacity: 0
 
                 MouseArea {
                     id: downButton
@@ -104,41 +205,28 @@ Rectangle {
                     }
                 }
             }
-        }        
-
-       /* model: ListModel {
-            id: pluginsModel
-
-            ListElement {
-                title: "Custom Context Menu Context Menu"
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis auctor magna.Fusce congue finibus enim, a dictum justo consectetur sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet lacus auctor turpis scelerisque fermentum quis a nisi. Duis vulputate ullamcorper ex, a rhoncus lacus ullamcorper euismod. Pellentesque et neque at"
-                pluginPreviewSource: "qrc:/plugin1.png"
-            }
-            ListElement {
-                title: "TaskBar location"
-                description: "Lorem ipsum dolor sit amet"
-                pluginPreviewSource: "qrc:/plugin1.png"
-            }
-            ListElement {
-                title: "Custom Context Menu"
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis auctor magna.Fusce congue finibus enim, a dictum justo consectetur sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sit amet lacus auctor turpis scelerisque fermentum quis a nisi. Duis vulputate ullamcorper ex, a rhoncus lacus ullamcorper euismod. Pellentesque et neque at"
-                pluginPreviewSource: "qrc:/plugin1.png"
-            }
-        }*/
+        }
 
         model: plugins
 
         delegate: Component {
             Rectangle {
                 id: pluginDelegate
-
+                radius: 10
                 width: pluginsGridView.cellWidth - 15
                 height: pluginsGridView.cellHeight - 15
 
-                radius: 10
+                color: ColorThemes.layer_04
+                border.color: "#5A5A5A"
+                border.width: 1
                 clip: true
 
-                color: ColorThemes.delegateColor
+//                layer.enabled: pluginDelegate.hovered | pluginDelegate.down
+//                layer.effect: DropShadow {
+//                    transparentBorder: true
+//                    color: "#ffffff"
+//                    samples: 10
+//                }
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -152,24 +240,31 @@ Rectangle {
 
                         Text {
                             id: pluginTitle
-                            text: name//title
+                            text: name //title
                             font.pointSize: 12
                             font.bold: true
-                            color: "#fff"
+                            color: ColorThemes.highEmphasisText
                             verticalAlignment: Text.AlignVCenter
+                            Layout.preferredWidth: 3
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             elide: Text.ElideRight
                         }
 
-                        Button {
-                            text: qsTr("Получить сейчас")
+                        Rectangle {
+                            color: ColorThemes.layer_05
+                            radius: 5
+                            border.color: "#5A5A5A"
+                            border.width: 1
 
+                            Layout.preferredWidth: 2
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            onClicked: {
-                                pluginPage.pluginPath = settingsPath
-                                stackLayout.currentIndex = 1
+
+                            Text {
+                                   text: qsTr("Price")
+                                   color: ColorThemes.helperText
+                                   anchors.centerIn: parent
                             }
                         }
                     }
@@ -178,7 +273,7 @@ Rectangle {
                         id: pluginDescription
                         text: description
                         font.pointSize: 10
-                        color: "#fff"
+                        color: ColorThemes.highEmphasisText
                         Layout.fillWidth: true
                         Layout.preferredHeight: description_metrics.tightBoundingRect.height * 3
                         wrapMode: Text.WordWrap
@@ -217,6 +312,30 @@ Rectangle {
                         }
                     }
                 }
+
+                Behavior on y {
+                    NumberAnimation { duration: 75 }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    hoverEnabled: true
+
+                    onEntered: {
+                        pluginDelegate.y += 3
+                    }
+
+                    onExited: {
+                        pluginDelegate.y -= 3
+                    }
+
+                    onClicked: {
+                        pluginPage.pluginPath = settingsPath
+                        stackLayout.currentIndex = 1
+                    }
+                }
+
             }
         }
 

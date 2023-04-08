@@ -1,18 +1,26 @@
-QT += quick \
+# https://dragly.org/2014/03/13/new-project-structure-for-projects-in-qt-creator-with-unit-tests/
+
+QT += \
+    quick \
+    quickcontrols2
+
+# Key States
+DEFINES += \
+    PR_DEBUG \
+#    PR_UNITS
 
 CONFIG(release, debug|release){
     # code for Release builds
-}
-else{
+} else {
     # code for Debug builds
     QT += testlib
     SOURCES += tests/regApiTest.cpp
     HEADERS += tests/regapitest.h
-    copydata.commands = $(COPY_DIR) $$shell_path($$PWD/DistPkg) $$shell_path($$OUT_PWD)
-    first.depends = $(first) copydata
-    export(first.depends)
-    export(copydata.commands)
-    QMAKE_EXTRA_TARGETS += first copydata
+
+    CONFIG += file_copies
+    COPIES += plugins
+    plugins.files = $$files(DistPkg/*)
+    plugins.path = $$OUT_PWD
 }
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -24,11 +32,13 @@ SOURCES += \
         main.cpp \
         modelpluginselection.cpp \
         plugin.cpp \
-        regapi.cpp \
-        regkey.cpp
+        regapi.cpp
 
-RESOURCES += qml.qrc \
+RESOURCES += \
+    qml.qrc \
     images.qrc
+
+RC_ICONS = WinPlugins.ico
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH += $$PWD
@@ -42,9 +52,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    GlobalParameters.h \
     appcore.h \
     modelpluginselection.h \
     plugin.h \
-    regapi.h \
-    regkey.h
+    regapi.h

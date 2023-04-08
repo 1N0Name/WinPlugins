@@ -3,15 +3,17 @@
 
 #define Model_Plugins_Column_Count 6
 
-#include "plugin.h"
 #include <QAbstractItemModel>
-#include <GlobalParameters.h>
+
+#include "plugin.h"
 
 class ModelPluginSelection : public QAbstractListModel
 {
     Q_OBJECT
+
 public:
     explicit ModelPluginSelection(QObject *parent = nullptr);
+
     enum PluginRoles
     {
         NameRole = Qt::UserRole + 1,
@@ -41,11 +43,13 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     QVariant data(const QModelIndex &index, int role) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-#if PR_DEBUG
+#ifdef PR_DEBUG
     void populate(int repeats);
 #endif
+
 private:
     QList<Plugin> m_plugins;
+
 signals:
     void modelChanged();
 };

@@ -2,7 +2,6 @@
 #define APPCORE_H
 
 #include <QObject>
-#include <GlobalParameters.h>
 
 class Appcore : public QObject
 {

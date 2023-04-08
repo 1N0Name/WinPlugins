@@ -4,14 +4,11 @@
         <file alias="library.svg">assets/images/icons/sideMenu/Library.svg</file>
         <file alias="menu.svg">assets/images/icons/sideMenu/Menu.svg</file>
         <file alias="settings.svg">assets/images/icons/sideMenu/Settings.svg</file>
-        <file alias="close_btn.svg">assets/images/icons/windowControl/close_btn.svg</file>
-        <file alias="maximize_btn.svg">assets/images/icons/windowControl/maximize_btn.svg</file>
-        <file alias="maximize_restore_btn.svg">assets/images/icons/windowControl/maximize_restore.svg</file>
-        <file alias="minimize_btn.svg">assets/images/icons/windowControl/minimize_btn.svg</file>
         <file alias="plugin1.png">assets/images/plugins/test_1.png</file>
         <file alias="down_arrow.svg">assets/images/icons/scrollBar/down_arrow.svg</file>
         <file alias="up_arrow.svg">assets/images/icons/scrollBar/up_arrow.svg</file>
-        <file>assets/images/icons/logo.png</file>
+        <file alias="search.svg">assets/images/icons/controls/search.svg</file>
+        <file>qml/controls/CustomComboBox.qml</file>
     </qresource>
     <qresource prefix="/icons"/>
 </RCC>

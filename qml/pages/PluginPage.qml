@@ -8,7 +8,7 @@ import Themes 0.1
 
 Rectangle {
     id: background
-    color: ColorThemes.pageBackgroundColor
+    color: ColorThemes.layer_02
     radius: 10
 
     property string pluginPath
@@ -20,13 +20,4 @@ Rectangle {
         anchors.fill: parent
         source: pluginPath
     }
-
-    /*MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            console.log("clicked");
-            //loader.setSource("file:///D:/Desktop/WinPlugins/WinPlugins/DistPkg/plugins/CustomContextMenu/CCM.qml")
-            loader.setSource(pluginPath)
-        }
-    }*/
 }

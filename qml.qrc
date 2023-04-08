@@ -2,11 +2,12 @@
     <qresource prefix="/">
         <file alias="main.qml">qml/main.qml</file>
         <file>qml/controls/SideMenuBtn.qml</file>
-        <file>qml/controls/TopBarBtn.qml</file>
         <file>qml/pages/HomePage.qml</file>
         <file>Themes/ColorThemes_01.qml</file>
         <file>Themes/qmldir</file>
         <file>assets/fonts/Montserrat-Regular.ttf</file>
         <file>qml/pages/PluginPage.qml</file>
+        <file>qml/pages/SettingsPage.qml</file>
+        <file>qml/controls/SearchBar.qml</file>
     </qresource>
 </RCC>
