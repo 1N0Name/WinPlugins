@@ -5,6 +5,8 @@
 		"version": "1.0",
 		"imgPath": "qrc:/plugin1.png",
 		"storePath": "tempstr",
-		"settingsPath": "TBP.qml"
+		"settingsPath": "TBP.qml",
+		"price": 1,
+		"category": "taskbar"
 	}
 }

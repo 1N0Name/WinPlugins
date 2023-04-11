@@ -1,13 +1,15 @@
 #ifndef REGAPI_H
 #define REGAPI_H
 
-#include <regkey.h>
+#include <Windows.h>
 
 class RegApi
 {
 public:
-    static RegKey readKey();
-    static void writeKey(RegKey key);
+    static void writeKey(HKEY key);
+
+private:
+    HKEY m_Hkey;
 };
 
 #endif // REGAPI_H

@@ -1,5 +1,3 @@
-#include "modelpluginselection.h"
-#include "GlobalParameters.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <direct.h>
@@ -10,17 +8,21 @@
 #include <QFile>
 #include <QDirIterator>
 
+#include "modelpluginselection.h"
+
 ModelPluginSelection::ModelPluginSelection(QObject *parent){}
 
 QHash<int, QByteArray> ModelPluginSelection::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[NameRole] = "name";
-    roles[DescriptionRole] = "description";
-    roles[VersionRole] = "version";
-    roles[ImgPathRole] = "imgPath";
-    roles[StorePathRole] = "storePath";
+    roles[NameRole]         = "name";
+    roles[DescriptionRole]  = "description";
+    roles[VersionRole]      = "version";
+    roles[ImgPathRole]      = "imgPath";
+    roles[StorePathRole]    = "storePath";
     roles[SettingsPathRole] = "settingsPath";
+    roles[PriceRole]        = "price";
+    roles[CategoryRole]     = "category";
     return roles;
 }
 
@@ -31,20 +33,32 @@ int ModelPluginSelection::rowCount(const QModelIndex &parent) const
 
 int ModelPluginSelection::columnCount(const QModelIndex &parent) const
 {
-    return Model_Plugins_Column_Count;
+    return MODEL_PLUGINS_COLUMN_COUNT;
 }
 
 QVariant ModelPluginSelection::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
+
     const Plugin &plg = m_plugins[index.row()];
-    if(role == NameRole) return plg.name();
-    if(role == DescriptionRole) return plg.description();
-    if(role == VersionRole) return plg.version();
-    if(role == ImgPathRole) return plg.imgPath();
-    if(role == StorePathRole) return plg.storePath();
-    if(role == SettingsPathRole) return plg.settingsPath();
+    if(role == NameRole)
+        return plg.getName();
+    if(role == DescriptionRole)
+        return plg.getDescription();
+    if(role == VersionRole)
+        return plg.getVersion();
+    if(role == ImgPathRole)
+        return plg.getImgPath();
+    if(role == StorePathRole)
+        return plg.getStorePath();
+    if(role == SettingsPathRole)
+        return plg.getSettingsPath();
+    if(role == PriceRole)
+        return plg.getPrice();
+    if(role == CategoryRole)
+        return plg.getCategory();
+
     return QVariant();
 }
 
@@ -107,18 +121,22 @@ bool ModelPluginSelection::isEmpty() const
     QFileInfo JSONinfo(JSONfile);
     QString settingsPath = "file:///" + JSONinfo.absolutePath() + "/" + plgObj["settingsPath"].toString();
 
-#if PR_DEBUG
-    qDebug() << plgObj["name"].toString() ;
-    qDebug() << plgObj["description"].toString();
-    qDebug() << plgObj["version"].toString();
-    qDebug() << plgObj["imgPath"].toString();
-    qDebug() << plgObj["storePath"].toString();
-    //qDebug() << plgObj["settingsPath"].toString();
-    qDebug() << settingsPath;
+#ifdef PR_DEBUG
+    qDebug() << "/ --------------------------------- Plugin --------------------------------- /";
+    qDebug() << "Plugin Title:\t" << plgObj["name"].toString();
+    qDebug() << "Description:\t" << plgObj["description"].toString();
+    qDebug() << "Version:\t\t" << plgObj["version"].toString();
+    qDebug() << "Image Preview Path:\t" << plgObj["imgPath"].toString();
+    qDebug() << "Preview Page Path:\t" << plgObj["storePath"].toString();
+    qDebug() << "Settings Page Path:\t" << settingsPath;
+    qDebug() << "Plugin Price:\t" << plgObj["price"].toDouble();
+    qDebug() << "Plugin Category:\t" << plgObj["category"].toString();
+    qDebug() << "/ -------------------------------------------------------------------------- /\n";
 #endif
 
     return Plugin(plgObj["name"].toString(), plgObj["description"].toString(), plgObj["version"].toString(),
-            plgObj["imgPath"].toString(), plgObj["storePath"].toString(), settingsPath);
+                  plgObj["imgPath"].toString(), plgObj["storePath"].toString(), settingsPath,
+                  plgObj["price"].toDouble(), plgObj["category"].toString());
 }
 
 void ModelPluginSelection::updateFromFileSystem()
@@ -140,7 +158,7 @@ QList<Plugin> ModelPluginSelection::getPlugins()
     return m_plugins;
 }
 
-#if PR_DEBUG
+#ifdef PR_DEBUG
 void ModelPluginSelection::populate(int repeats)
 {
     for(int i = 0 ; i < repeats; i++)

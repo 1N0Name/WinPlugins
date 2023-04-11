@@ -1,21 +1,20 @@
 #ifndef REGAPITEST_H
 #define REGAPITEST_H
 
-#include <GlobalParameters.h>
+#ifdef PR_UNITS
+    #include <QObject>
+    #include <QTest>
 
-#if PR_DEBUG
-#include <QObject>
-#include <QTest>
-#include <regapi.h>
-class RegApiTest : public QObject
-{
-    Q_OBJECT
-private slots:
-    /* ------------------------ Unit tests ------------------------ */
-    void regKeyReadTest();
-    /* ------------------------ Integration tests ------------------------ */
-    void regKeyValidationTest();
-};
-#endif
+    #include "regapi.h"
 
+    class RegApiTest : public QObject
+    {
+        Q_OBJECT
+    private slots:
+        /* ------------------------ Unit tests ------------------------ */
+        void regKeyReadTest();
+        /* ------------------------ Integration tests ------------------------ */
+        void regKeyValidationTest();
+    };
+    #endif
 #endif // REGAPITEST_H
