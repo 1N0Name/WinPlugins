@@ -3,13 +3,15 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import Themes 0.1
+import Texts 0.1
 
 import "../controls"
 
-Rectangle {
+RoundRectangle {
     id: background
     color: ColorThemes.layer_02
     radius: 10
+    radiusCorners: Qt.AlignLeft | Qt.AlignTop
 
     ColumnLayout {
         anchors.fill: parent
@@ -20,12 +22,9 @@ Rectangle {
 
         spacing: 10
 
-        Text {
+        HeaderText {
             text: qsTr("Выберите тему")
             color: ColorThemes.highEmphasisText
-
-            font.pointSize: 12
-            font.bold: true
             elide: Text.ElideRight
 
             verticalAlignment: Text.AlignVCenter
@@ -71,12 +70,9 @@ Rectangle {
             }
         }
 
-        Text {
+        HeaderText {
             text: qsTr("Выберите язык")
             color: ColorThemes.highEmphasisText
-
-            font.pointSize: 12
-            font.bold: true
             elide: Text.ElideRight
 
             verticalAlignment: Text.AlignVCenter

@@ -27,7 +27,7 @@ defineTest(copyFilesToDir) {
     export(QMAKE_POST_LINK)
 }
 
-copyFilesToDir(some/*.dll, $$DESTDIR/other)
+#copyFilesToDir(some/*.dll, $$DESTDIR/other)
 
 CONFIG(release, debug|release) {
     # code for Release builds
@@ -37,8 +37,8 @@ CONFIG(release, debug|release) {
     SOURCES += tests/regApiTest.cpp
     HEADERS += tests/regapitest.h
 
-    removeDirRecursive($$OUT_PWD/plugins)
-    copyFilesToDir($$PWD/DistPkg, $$OUT_PWD)
+#    removeDirRecursive($$OUT_PWD/plugins)
+#    copyFilesToDir($$PWD/DistPkg, $$OUT_PWD)
 
 #    CONFIG += file_copies
 #    COPIES += plugins

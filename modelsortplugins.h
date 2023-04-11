@@ -7,11 +7,14 @@
 
 class ModelSortPlugins : public QSortFilterProxyModel
 {
+
     Q_OBJECT
     Q_PROPERTY(QString nameFilter READ nameFilter WRITE setNameFilter NOTIFY filterChanged)
     Q_PROPERTY(QString categoryFilter READ categoryFilter WRITE setCategoryFilter NOTIFY filterChanged)
     //Q_PROPERTY(QString priceFilter READ priceFilter WRITE setPriceFilter NOTIFY filterChanged)
+
 public:
+
     explicit ModelSortPlugins(QObject *parent = nullptr): QSortFilterProxyModel(parent){};
 
     QString nameFilter() const
@@ -38,12 +41,17 @@ public:
 
 signals:
     void filterChanged();
+
 protected:
+
     bool filterAcceptsRow(int, const QModelIndex &) const override;
+
 private:
+
     QRegularExpression nameRegExp;
     QRegularExpression categoryRegExp;
     void updateFilter();
+
 };
 
 #endif // MODELSORTPLUGINS_H

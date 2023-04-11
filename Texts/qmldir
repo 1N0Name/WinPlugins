@@ -1,0 +1,5 @@
+module Texts
+
+HeaderText 0.1 HeaderText_01.qml
+RegularText 0.1 RegularText_01.qml
+HelperText 0.1 HelperText_01.qml

@@ -8,7 +8,6 @@
         <file alias="down_arrow.svg">assets/images/icons/scrollBar/down_arrow.svg</file>
         <file alias="up_arrow.svg">assets/images/icons/scrollBar/up_arrow.svg</file>
         <file alias="search.svg">assets/images/icons/controls/search.svg</file>
-        <file>qml/controls/CustomComboBox.qml</file>
     </qresource>
     <qresource prefix="/icons"/>
 </RCC>

@@ -1,247 +1,251 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.15
 import Qt5Compat.GraphicalEffects
+
 import Themes 0.1
+import Texts 0.1
 
 import "../controls/"
 
-Rectangle {
-    id: background
-    color: ColorThemes.layer_02
-    radius: 10
+ColumnLayout {
+    id: root
+    spacing: 10
 
     /* -------------------- Internal properties / functions. -------------------- */
     QtObject {
         id: internal
-
-        function toggleScrollBar() {
-            if(vbar.hovered) {
-//                vbarIndicator.width     = vbar.width - vbar.contentItemOffset
-                vbarBG.opacity          = 1
-                vbarUpArrow.opacity     = 1
-                vbarDownArrow.opacity   = 1
-            } else if (!vbar.pressed) {
-//                vbarIndicator.width     = vbar.width / 2
-                vbarBG.opacity          = 0
-                vbarUpArrow.opacity     = 0
-                vbarDownArrow.opacity   = 0
-            }
-        }
     }
     /* -------------------------------------------------------------------------- */
 
     Rectangle {
         id:controlPanel
         color: ColorThemes.transparent
-        height: 40
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        Layout.fillWidth: true
+        Layout.preferredHeight: 45
 
         RowLayout {
+            layoutDirection: Qt.RightToLeft
             spacing: 10
 
             anchors.fill: parent
             anchors.topMargin: 10
             anchors.leftMargin: pluginsGridView.anchors.leftMargin
-            anchors.rightMargin: vbar.width + pluginsGridView.anchors.rightMargin
-
+            anchors.rightMargin: vbar.width + pluginsGridView.anchors.rightMargin * 2
 
             SearchBar {
                 id: searchField
 
-                Layout.preferredWidth: 320
-                Layout.fillHeight: true
-            }
+                onTextChanged: filteredPlugins.nameFilter = text;
 
-            Text {
-                text: qsTr("Категория: ")
-                color: ColorThemes.highEmphasisText
-                font.pointSize: 12
+                Layout.preferredWidth: searchField.searchBarWidth
+                Layout.fillHeight: true
             }
 
             CustomComboBox {
+                placeholderText: "Категория"
                 Layout.fillHeight: true
+
                 model: ListModel {
                     id: categoryModel
-                    ListElement { text: "Контекстное меню"; category: "context"}
+                    ListElement { text: "Все"; category: "" }
+                    ListElement { text: "Контекстное меню"; category: "context" }
                     ListElement { text: "Таскбар"; category: "taskbar" }
                 }
-                textRole: "text"
-                onCurrentIndexChanged:
-                {
-                    //console.log(currentIndex.category);
-                    filteredPlugins.categoryFilter = "";
+                onCurrentIndexChanged: {
+                    // Tweak to prevent a random onExited event from triggering
+                    plugins.updateFromFileSystem();
+                    filteredPlugins.categoryFilter = categoryModel.get(currentIndex).category;
                 }
-            }
-
-            Text {
-                text: qsTr("Стоимость: ")
-                color: ColorThemes.highEmphasisText
-                font.pointSize: 12
             }
 
             CustomComboBox {
+                placeholderText: "Стоимость"
                 Layout.fillHeight: true
+
                 model: ListModel {
                     id: priceModel
-                    ListElement { text: "Бесплатные" }
                     ListElement { text: "Все" }
+                    ListElement { text: "Бесплатные" }
                 }
             }
 
-           Item {
-               Layout.fillWidth: true
-           }
+            Item {
+                Layout.fillWidth: true
+            }
         }
     }
 
-    GridView {
-        id: pluginsGridView
+    RoundRectangle {
+        id: pluginsGridViewBackground
+        color: ColorThemes.layer_02
 
-        anchors.top: controlPanel.bottom
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: 10
-        anchors.rightMargin: 5
-        anchors.topMargin: 10
-        anchors.bottomMargin: 10
+        radius: 10
+        radiusCorners: Qt.AlignLeft | Qt.AlignTop
 
-        clip: true
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-        readonly property int defaultCellWidth: 250
-        readonly property int defaultCellHeight: 225
+        GridView {
+            id: pluginsGridView
 
-        cellWidth: Math.floor(width / Math.floor(width / defaultCellWidth))
-        cellHeight: Math.floor((cellWidth / defaultCellWidth) * defaultCellHeight)
+            anchors.fill: parent
+            anchors.leftMargin: 10
+            anchors.rightMargin: 5
+            anchors.topMargin: 10
 
-        onWidthChanged: {
+            clip: true
+
+            readonly property int defaultCellWidth: 250
+            readonly property int defaultCellHeight: 225
+
             cellWidth: Math.floor(width / Math.floor(width / defaultCellWidth))
             cellHeight: Math.floor((cellWidth / defaultCellWidth) * defaultCellHeight)
+
+            onWidthChanged: {
+                cellWidth: Math.floor(width / Math.floor(width / defaultCellWidth))
+                cellHeight: Math.floor((cellWidth / defaultCellWidth) * defaultCellHeight)
+            }
+
+            ScrollBar.vertical: ScrollBar {
+                id: vbar
+
+                property int contentItemOffset: 2
+
+                width: 12
+                policy: ScrollBar.AlwaysOn
+
+                topPadding: vbarUpArrow.height + vbarUpArrow.anchors.topMargin * 2
+                bottomPadding: vbarDownArrow.height + vbarDownArrow.anchors.bottomMargin * 2
+
+                contentItem: Rectangle {
+                    id: vbarIndicator
+                    color: ColorThemes.layer_04
+                    radius: 10
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: vbar.hovered ? vbar.contentItemOffset : !vbar.pressed
+                                                       ? vbar.contentItemOffset * 2 : vbar.contentItemOffset
+                    anchors.rightMargin: vbar.hovered ? vbar.contentItemOffset : !vbar.pressed
+                                                        ? vbar.contentItemOffset * 2 : vbar.contentItemOffset
+                }
+
+                background: Rectangle {
+                    id: vbarBG
+                    visible: vbar.hovered || vbar.pressed
+                    color: ColorThemes.layer_01
+                    radius: 10
+
+                    opacity: vbar.hovered ? 1 : !vbar.pressed ? 0 : 1
+
+                    Behavior on opacity {
+                        NumberAnimation { duration: 100 }
+                    }
+                }
+
+                Image {
+                    id: vbarUpArrow
+                    source: 'qrc:/up_arrow.svg'
+                    sourceSize: Qt.size(parent.width - 4, parent.width)
+
+                    anchors.top: parent.top
+                    anchors.topMargin: 4
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    opacity: vbar.hovered ? 1 : !vbar.pressed ? 0 : 1
+
+                    ColorOverlay {
+                        anchors.fill: vbarUpArrow
+                        source: vbarUpArrow
+                        color: ColorThemes.activeIcon
+                        antialiasing: true
+                    }
+
+                    MouseArea {
+                        id: upButton
+                        anchors.fill: parent
+
+                        SmoothedAnimation {
+                            target: pluginsGridView
+                            property: "contentY"
+                            running: upButton.pressed
+                            velocity: 1000
+                            to: 0
+                        }
+
+                        onReleased: {
+                            if (!pluginsGridView.atYBeginning)
+                                pluginsGridView.flick(0, 1000)
+                        }
+                    }
+                }
+
+                Image {
+                    id: vbarDownArrow
+                    source: 'qrc:/down_arrow.svg'
+                    sourceSize: Qt.size(parent.width - 4, parent.width)
+
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 4
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    opacity: vbar.hovered ? 1 : !vbar.pressed ? 0 : 1
+
+                    ColorOverlay {
+                        anchors.fill: vbarDownArrow
+                        source: vbarDownArrow
+                        color: ColorThemes.activeIcon
+                        antialiasing: true
+                    }
+
+                    MouseArea {
+                        id: downButton
+                        anchors.fill: parent
+
+                        SmoothedAnimation {
+                            target: pluginsGridView
+                            property: "contentY"
+                            running: downButton.pressed
+                            to: pluginsGridView.contentHeight - pluginsGridView.height
+                            velocity: 1000
+                        }
+
+                        onReleased: {
+                            if (!pluginsGridView.atYEnd)
+                                pluginsGridView.flick(0, -1000)
+                        }
+                    }
+                }
+            }
+
+            model: filteredPlugins
+
+            delegate: pluginDelegateWrapper
+
+            focus: true
         }
 
-        ScrollBar.vertical: ScrollBar {
-            id: vbar
+        Component {
+            id: pluginDelegateWrapper
 
-            property int contentItemOffset: 4
-
-            width: 12
-
-            topPadding: width + 10
-            bottomPadding: width + 10
-
-            contentItem: Rectangle {
-                id: vbarIndicator
-                color: "#5A5A5A"
-                radius: 10
-
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            background: Rectangle {
-                id: vbarBG
-                color: ColorThemes.layer_04
-                radius: 10
-
-                opacity: 0
-
-                Behavior on opacity {
-                    NumberAnimation { duration: 100 }
-                }
-            }
-
-            onHoveredChanged: {
-                internal.toggleScrollBar()
-            }
-
-            onPressedChanged: {
-                internal.toggleScrollBar()
-            }
-
-            Image {
-                id: vbarUpArrow
-                source: 'qrc:/up_arrow.svg'
-                sourceSize: Qt.size(parent.width - 4, parent.width)
-
-                anchors.top: parent.top
-                anchors.topMargin: 5
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                opacity: 0
-
-                MouseArea {
-                    id: upButton
-                    anchors.fill: parent
-
-                    SmoothedAnimation {
-                        target: pluginsGridView
-                        property: "contentY"
-                        running: upButton.pressed
-                        velocity: 1000
-                        to: 0
-                    }
-
-                    onReleased: {
-                        if (!pluginsGridView.atYBeginning)
-                            pluginsGridView.flick(0, 1000)
-                    }
-                }
-            }
-
-            Image {
-                id: vbarDownArrow
-                source: 'qrc:/down_arrow.svg'
-                sourceSize: Qt.size(parent.width - 4, parent.width)
-
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 5
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                opacity: 0
-
-                MouseArea {
-                    id: downButton
-                    anchors.fill: parent
-
-                    SmoothedAnimation {
-                        target: pluginsGridView
-                        property: "contentY"
-                        running: downButton.pressed
-                        to: pluginsGridView.contentHeight - pluginsGridView.height
-                        velocity: 1000
-                    }
-
-                    onReleased: {
-                        if (!pluginsGridView.atYEnd)
-                            pluginsGridView.flick(0, -1000)
-                    }
-                }
-            }
-        }
-
-        model: filteredPlugins
-
-        delegate: Component {
             Rectangle {
                 id: pluginDelegate
                 radius: 10
                 width: pluginsGridView.cellWidth - 15
                 height: pluginsGridView.cellHeight - 15
 
-                color: ColorThemes.layer_04
-                border.color: "#5A5A5A"
-                border.width: 1
-                clip: true
+                required property int index
+                required property string name
+                required property string category
+                required property string description
+                required property string imgPath
+                required property double price
+                required property string settingsPath
 
-//                layer.enabled: pluginDelegate.hovered | pluginDelegate.down
-//                layer.effect: DropShadow {
-//                    transparentBorder: true
-//                    color: "#ffffff"
-//                    samples: 10
-//                }
+                color: ColorThemes.layer_01
+                clip: true
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -253,41 +257,63 @@ Rectangle {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
 
-                        Text {
-                            id: pluginTitle
-                            text: name //title
-                            font.pointSize: 12
-                            font.bold: true
-                            color: ColorThemes.highEmphasisText
-                            verticalAlignment: Text.AlignVCenter
-                            Layout.preferredWidth: 3
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            elide: Text.ElideRight
-                        }
-
-                        Rectangle {
-                            color: ColorThemes.layer_05
-                            radius: 5
-                            border.color: "#5A5A5A"
-                            border.width: 1
-
+                        ColumnLayout {
                             Layout.preferredWidth: 2
                             Layout.fillWidth: true
                             Layout.fillHeight: true
 
-                            Text {
-                                   text: price
+                            HeaderText {
+                                id: pluginTitle
+                                text: name
+                                color: ColorThemes.highEmphasisText
+                                verticalAlignment: Text.AlignVCenter
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                elide: Text.ElideRight
+                            }
+
+                            HelperText {
+                                id: pluginCategory
+                                text: category
+                                color: ColorThemes.helperText
+                                verticalAlignment: Text.AlignVCenter
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                elide: Text.ElideRight
+                            }
+                        }
+
+                        Item {
+                            Layout.preferredWidth: 1
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            clip: true
+
+                            Rectangle {
+                                width: 75
+                                height: 25
+                                radius: 5
+                                color: ColorThemes.layer_05
+
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.margins: 0
+
+                                RegularText {
+                                   text: price === 0 ? "Бесплатно" : price
                                    color: ColorThemes.helperText
-                                   anchors.centerIn: parent
+                                   anchors.fill: parent
+                                   verticalAlignment: Text.AlignVCenter
+                                   horizontalAlignment: Text.AlignHCenter
+                                   elide: Text.ElideRight
+                                }
                             }
                         }
                     }
 
-                    Text {
+                    RegularText {
                         id: pluginDescription
                         text: description
-                        font.pointSize: 10
                         color: ColorThemes.highEmphasisText
                         Layout.fillWidth: true
                         Layout.preferredHeight: description_metrics.tightBoundingRect.height * 3
@@ -317,6 +343,7 @@ Rectangle {
                             maskSource: Item {
                                 width: pluginPreview.width
                                 height: pluginPreview.height
+
                                 Rectangle {
                                     anchors.centerIn: parent
                                     width: pluginPreview.adapt ? pluginPreview.width : Math.min(pluginPreview.width, pluginPreview.height)
@@ -328,13 +355,18 @@ Rectangle {
                     }
                 }
 
+                property int y_pos: -1
+
                 Behavior on y {
                     NumberAnimation { duration: 75 }
                 }
 
-                property int y_pos: -1
+                // Сorrecting the y position of the delegate
+                onIndexChanged: y_pos = -1
+                onWidthChanged: y_pos = -1
 
                 MouseArea {
+                    id: pluginDelegateMA
                     anchors.fill: parent
                     hoverEnabled: true
 
@@ -347,6 +379,8 @@ Rectangle {
                     }
 
                     onExited: {
+                        if (y_pos === -1)
+                            y_pos = pluginDelegate.y
                         pluginDelegate.y = y_pos
                     }
 
@@ -356,9 +390,13 @@ Rectangle {
                     }
                 }
 
+                layer.enabled: pluginDelegateMA.containsMouse
+                layer.effect: DropShadow {
+                    transparentBorder: true
+                    color: pluginDelegate.color
+                    samples: 20
+                }
             }
         }
-
-        focus: true
     }
 }

@@ -48,8 +48,6 @@ int main(int argc, char *argv[])
     ModelSortPlugins filteredPlugins;
     filteredPlugins.setSourceModel(&plugins);
 
-    plugins.updateFromFileSystem();
-
     engine.rootContext()->setContextProperty("plugins", &plugins);
     engine.rootContext()->setContextProperty("filteredPlugins", &filteredPlugins);
 

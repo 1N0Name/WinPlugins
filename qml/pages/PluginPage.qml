@@ -6,10 +6,13 @@ import QtQuick.Controls.Material 2.3
 
 import Themes 0.1
 
-Rectangle {
+import "../controls"
+
+RoundRectangle {
     id: background
     color: ColorThemes.layer_02
     radius: 10
+    radiusCorners: Qt.AlignLeft | Qt.AlignTop
 
     property string pluginPath
 

@@ -1,7 +1,7 @@
 #ifndef MODELPLUGINSELECTION_H
 #define MODELPLUGINSELECTION_H
 
-#define Model_Plugins_Column_Count 6
+#define MODEL_PLUGINS_COLUMN_COUNT 6
 
 #include <QAbstractItemModel>
 

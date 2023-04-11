@@ -1,7 +1,7 @@
 pragma Singleton
 
-import QtQuick 2.9
-import QtQuick.Controls 2.5
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 Item {
     id: item
@@ -11,13 +11,13 @@ Item {
     QtObject {
         id: m_themes
 
-        readonly property var light: [ "#f0f0f0", "#f3f3f3", "#fbfbfb", "#fefefe", "#ffffff",
-            "#DE000000", "#99000000", "#DE000000", "#99000000"
+        readonly property var light: [ "#ede9ed", "#fffbff", "#d5d1d5", "#c2bcc2", "#e5c1d5",
+            "#DE61619c", "#99000000", "#DE000000", "#99000000"
 
         ];
 
-        readonly property var dark:  [ "#1e1e1e", "#222222", "#242424", "#272727", "#2c2c2c",
-            "#DEffffff", "#99ffffff", "#DEffffff", "#99ffffff"
+        readonly property var dark:  [ "#28262c", "#1c1b1f", "#33303a", "#44414B", "#5f3c51",
+            "#DEc0c1ff", "#99b3b3b3", "#DEffffff", "#99ffffff"
         ];
     }
 

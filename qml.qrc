@@ -5,9 +5,14 @@
         <file>qml/pages/HomePage.qml</file>
         <file>Themes/ColorThemes_01.qml</file>
         <file>Themes/qmldir</file>
-        <file>assets/fonts/Montserrat-Regular.ttf</file>
         <file>qml/pages/PluginPage.qml</file>
         <file>qml/pages/SettingsPage.qml</file>
         <file>qml/controls/SearchBar.qml</file>
+        <file>Texts/HeaderText_01.qml</file>
+        <file>Texts/HelperText_01.qml</file>
+        <file>Texts/RegularText_01.qml</file>
+        <file>Texts/qmldir</file>
+        <file>qml/controls/CustomComboBox.qml</file>
+        <file>qml/controls/RoundRectangle.qml</file>
     </qresource>
 </RCC>

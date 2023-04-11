@@ -33,7 +33,7 @@ int ModelPluginSelection::rowCount(const QModelIndex &parent) const
 
 int ModelPluginSelection::columnCount(const QModelIndex &parent) const
 {
-    return Model_Plugins_Column_Count;
+    return MODEL_PLUGINS_COLUMN_COUNT;
 }
 
 QVariant ModelPluginSelection::data(const QModelIndex &index, int role) const
@@ -43,21 +43,21 @@ QVariant ModelPluginSelection::data(const QModelIndex &index, int role) const
 
     const Plugin &plg = m_plugins[index.row()];
     if(role == NameRole)
-        return plg.name();
+        return plg.getName();
     if(role == DescriptionRole)
-        return plg.description();
+        return plg.getDescription();
     if(role == VersionRole)
-        return plg.version();
+        return plg.getVersion();
     if(role == ImgPathRole)
-        return plg.imgPath();
+        return plg.getImgPath();
     if(role == StorePathRole)
-        return plg.storePath();
+        return plg.getStorePath();
     if(role == SettingsPathRole)
-        return plg.settingsPath();
+        return plg.getSettingsPath();
     if(role == PriceRole)
-        return plg.price();
+        return plg.getPrice();
     if(role == CategoryRole)
-        return plg.category();
+        return plg.getCategory();
 
     return QVariant();
 }

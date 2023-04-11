@@ -4,20 +4,29 @@ import QtQuick.Layouts 1.15
 import Qt5Compat.GraphicalEffects
 
 import Themes 0.1
+import Texts 0.1
 
 ComboBox {
     id: root
+    textRole: "text"
 
-    property color activeColor: ColorThemes.layer_05
-    property color inActiveColor: ColorThemes.layer_04
+    property color activeColor: ColorThemes.layer_04
+    property color inActiveColor: ColorThemes.layer_03
+    property string placeholderText: ""
+
+    currentIndex: placeholderText === "" ? 0 : -1
+    displayText: currentIndex === -1 ? placeholderText : currentText
+
+    property bool isActive: false
 
     delegate: ItemDelegate {
         width: root.width - 10
 
-        contentItem: Text {
-            text: modelData
+        property variant modelData: model
+
+        contentItem: HelperText {
+            text: modelData.text
             color: root.highlightedIndex === index ? ColorThemes.highEmphasisText : ColorThemes.helperText
-            font.family: "Arial"
             elide: Text.ElideRight
             verticalAlignment: Text.AlignVCenter
         }
@@ -27,25 +36,37 @@ ComboBox {
             height: parent.height
             color: root.highlightedIndex === index ? root.activeColor : root.inActiveColor
             radius: 5
+
+            Rectangle {
+                color: ColorThemes.layer_05
+                visible: root.highlightedIndex === index ? true : false
+
+                width: 3
+                height: 20
+                radius: 5
+
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
     }
 
-    indicator: Canvas {
-        id: canvas
+    indicator: Image {
+        id: indicatorIcon
         x: root.width - width - 10
         y: (root.availableHeight - height) / 2
-        width: 12
-        height: 8
-        contextType: "2d"
 
-        onPaint: {
-            context.reset();
-            context.moveTo(0, 0);
-            context.lineTo(width, 0);
-            context.lineTo(width / 2, height);
-            context.closePath();
-            context.fillStyle = ColorThemes.activeIcon
-            context.fill();
+        source: 'qrc:/down_arrow.svg'
+        sourceSize: Qt.size(12, 12)
+
+        ColorOverlay {
+            anchors.fill: indicatorIcon
+            source: indicatorIcon
+
+            color: root.down ? ColorThemes.inActiveIcon : ColorThemes.activeIcon
+
+            antialiasing: true
         }
 
         Behavior on rotation {
@@ -55,19 +76,16 @@ ComboBox {
         }
     }
 
-    contentItem: Item {
-        height: root.height
+    contentItem: RegularText {
+        anchors.fill: parent
 
-        Text {
-            width: root.width - canvas.width - leftPadding - 5
-            height: root.height
+        RegularText {
+            anchors.fill: parent
             leftPadding: 10
+            rightPadding: indicatorIcon.width + leftPadding +10
             verticalAlignment: Text.AlignVCenter
             text: root.displayText
             elide: Text.ElideRight
-
-            font.pixelSize: 15
-            font.family: "Arial"
             color: root.down ? ColorThemes.helperText : ColorThemes.highEmphasisText
         }
     }
@@ -117,9 +135,9 @@ ComboBox {
 
         onVisibleChanged: {
             if (visible)
-                canvas.rotation = 180
+                indicatorIcon.rotation = 180
             else
-                canvas.rotation = 0
+                indicatorIcon.rotation = 0
         }
     }
 }
