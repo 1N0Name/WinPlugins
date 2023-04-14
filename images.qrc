@@ -8,6 +8,8 @@
         <file alias="down_arrow.svg">assets/images/icons/scrollBar/down_arrow.svg</file>
         <file alias="up_arrow.svg">assets/images/icons/scrollBar/up_arrow.svg</file>
         <file alias="search.svg">assets/images/icons/controls/search.svg</file>
+        <file alias="folder.svg">assets/images/plugins/folder.svg</file>
+        <file alias="image.svg">assets/images/plugins/image.svg</file>
     </qresource>
     <qresource prefix="/icons"/>
 </RCC>

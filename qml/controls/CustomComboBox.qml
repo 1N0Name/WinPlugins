@@ -76,7 +76,7 @@ ComboBox {
         }
     }
 
-    contentItem: RegularText {
+    contentItem: Item {
         anchors.fill: parent
 
         RegularText {
@@ -133,11 +133,6 @@ ComboBox {
             }
         }
 
-        onVisibleChanged: {
-            if (visible)
-                indicatorIcon.rotation = 180
-            else
-                indicatorIcon.rotation = 0
-        }
+        onVisibleChanged: visible ? indicatorIcon.rotation = 180 : indicatorIcon.rotation = 0
     }
 }

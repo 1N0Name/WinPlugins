@@ -8,6 +8,7 @@ import Themes 0.1
 
 import "./qml/controls"
 import "./qml/pages"
+import "./qml/plugins"
 
 Window {
     id: mainWindow
@@ -121,12 +122,7 @@ Window {
 
                     btnIconSource: 'qrc:/menu.svg'
 
-                    onClicked: {
-                        if (sideMenu.state === 'close')
-                            sideMenu.state = 'open';
-                        else
-                            sideMenu.state = 'close';
-                    }
+                    onClicked: sideMenu.state === 'close' ? sideMenu.state = 'open' : sideMenu.state = 'close'
                 }
 
                 Repeater {
@@ -184,7 +180,7 @@ Window {
                 HomePage {
                     id: homePage
                 }
-                PluginPage {
+                IconChanger {
                     id: pluginPage
                 }
                 SettingsPage {
