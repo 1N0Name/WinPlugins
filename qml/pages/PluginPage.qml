@@ -5,8 +5,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Controls.Material 2.3
 
 import Themes 0.1
-
-import "../controls"
+import Controls 0.1
 
 RoundRectangle {
     id: background

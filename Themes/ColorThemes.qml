@@ -12,12 +12,13 @@ Item {
         id: m_themes
 
         readonly property var light: [ "#ede9ed", "#fffbff", "#d5d1d5", "#c2bcc2", "#e5c1d5",
-            "#DE61619c", "#99000000", "#DE000000", "#99000000"
-
+            "#DE61619c", "#99000000", "#DE000000", "#99000000", "#DEffffff",
+            "#5053b5", "#4043a5", "#323597", "#10a418", "#982323"
         ];
 
         readonly property var dark:  [ "#28262c", "#1c1b1f", "#33303a", "#44414B", "#5f3c51",
-            "#DEc0c1ff", "#99b3b3b3", "#DEffffff", "#99ffffff"
+            "#DEc0c1ff", "#99b3b3b3", "#DEffffff", "#99ffffff", "#DE000000",
+            "#c0c1ff", "#cccdff", "#d9d9ff", "#9cd99f", "#ffb4ab"
         ];
     }
 
@@ -37,5 +38,12 @@ Item {
 
     readonly property string highEmphasisText:                  currentTheme[7]
     readonly property string helperText:                        currentTheme[8]
+    readonly property string highEmphasisTextContrast:          currentTheme[9]
+
+    readonly property string btnDefault:                        currentTheme[10]
+    readonly property string btnHovered:                        currentTheme[11]
+    readonly property string btnPressed:                        currentTheme[12]
+    readonly property string success:                           currentTheme[13]
+    readonly property string error:                             currentTheme[14]
     /* -------------------------------------------------------------------------- */
 }

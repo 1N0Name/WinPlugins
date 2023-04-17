@@ -1,0 +1,12 @@
+{
+    "plugin": {
+        "name": "IconChanger",
+        "description": "Some other plugin with long description and something else",
+        "version": "1.0",
+        "imgPath": "qrc:/plugin1.png",
+        "storePath": "tempstr",
+        "settingsPath": "IconChanger.qml",
+        "price": 8.2,
+        "category": "icons"
+    }
+}

@@ -4,8 +4,7 @@ import QtQuick.Layouts 1.3
 
 import Themes 0.1
 import Texts 0.1
-
-import "../controls"
+import Controls 0.1
 
 RoundRectangle {
     id: background

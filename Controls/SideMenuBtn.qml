@@ -10,7 +10,7 @@ Button {
     text: qsTr("")
     visible:                                                                enabled? true : false
 
-    property url btnIconSource:                                             "../../images/svg/menu.svg"
+    property url btnIconSource:                                             "qrc:/menu.svg"
 
     property int iconWidth:                                                 25
     property int iconHeight:                                                25

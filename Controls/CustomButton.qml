@@ -11,12 +11,15 @@ Button {
     width: 150
     height: 40
 
-    property var buttonDynamicColor: root.down ? ColorThemes.layer_04 : root.hovered
-                                        ? ColorThemes.layer_03 : ColorThemes.layer_03
+    property color textColor        : ColorThemes.highEmphasisTextContrast
+    property int textAlignment      : Qt.AlignLeft
+    property var buttonDynamicColor : root.down ? ColorThemes.btnPressed : root.hovered
+                                                ? ColorThemes.btnHovered : ColorThemes.btnDefault
 
     contentItem: RegularText {
         text: root.text
-        color: ColorThemes.highEmphasisText
+        color: textColor
+        horizontalAlignment: textAlignment
         verticalAlignment: Qt.AlignVCenter
         elide: Qt.ElideRight
     }

@@ -5,10 +5,9 @@ import QtQuick.Window 2.3
 import Qt5Compat.GraphicalEffects
 
 import Themes 0.1
+import Controls 0.1
 
-import "./qml/controls"
-import "./qml/pages"
-import "./qml/plugins"
+import './pages'
 
 Window {
     id: mainWindow
@@ -180,7 +179,7 @@ Window {
                 HomePage {
                     id: homePage
                 }
-                IconChanger {
+                PluginPage {
                     id: pluginPage
                 }
                 SettingsPage {

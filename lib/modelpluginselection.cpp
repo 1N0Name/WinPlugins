@@ -142,7 +142,9 @@ bool ModelPluginSelection::isEmpty() const
 void ModelPluginSelection::updateFromFileSystem()
 {
     this->clear();
-    if(dirExists("plugins") == 0) mkdir("plugins");
+    // TODO: Do we even need this check?
+    if(dirExists("plugins") == 0)
+        _mkdir("plugins");
 
     QDirIterator it(QDir::currentPath() + "/plugins", {"*.plg"}, QDir::Files, QDirIterator::Subdirectories);
 
