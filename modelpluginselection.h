@@ -41,6 +41,7 @@ public:
     Q_INVOKABLE void updateFromFileSystem();
     /*Returns <m_plugins> as a value*/
     Q_INVOKABLE QList<Plugin> getPlugins();
+    //Q_INVOKABLE void forceUpdate();
     /* ------------------------ QAbstractListModel Methods ------------------------ */
     QHash<int, QByteArray> roleNames() const override;
     QVariant data(const QModelIndex &, int) const override;
@@ -48,7 +49,6 @@ public:
 #ifdef PR_DEBUG
     void populate(int repeats);
 #endif
-
 private:
     QList<Plugin> m_plugins;
 

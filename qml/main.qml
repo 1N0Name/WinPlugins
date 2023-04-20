@@ -180,7 +180,7 @@ Window {
                 HomePage {
                     id: homePage
                 }
-                IconChanger {
+                PluginPage {
                     id: pluginPage
                 }
                 SettingsPage {

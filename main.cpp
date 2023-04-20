@@ -44,7 +44,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("appcore", &appcore);
 
     ModelPluginSelection plugins;
-    plugins.updateFromFileSystem();
+    //plugins.updateFromFileSystem();
+    plugins.populate(5);
     ModelSortPlugins filteredPlugins;
     filteredPlugins.setSourceModel(&plugins);
 

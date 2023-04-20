@@ -5,7 +5,7 @@
     #include <QObject>
     #include <QTest>
 
-    #include "regapi.h"
+    #include "pluginscore.h"
 
     class RegApiTest : public QObject
     {

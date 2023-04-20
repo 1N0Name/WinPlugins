@@ -158,6 +158,15 @@ QList<Plugin> ModelPluginSelection::getPlugins()
     return m_plugins;
 }
 
+/*void ModelPluginSelection::forceUpdate()
+{
+    beginResetModel();
+    auto temp = m_plugins;
+    m_plugins = temp;
+    endResetModel();
+    emit modelChanged();
+}*/
+
 #ifdef PR_DEBUG
 void ModelPluginSelection::populate(int repeats)
 {

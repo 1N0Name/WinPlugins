@@ -4,6 +4,7 @@ QT += \
     quick \
     quickcontrols2
 
+
 # Key States
 DEFINES += \
     PR_DEBUG \
@@ -27,8 +28,6 @@ defineTest(copyFilesToDir) {
     export(QMAKE_POST_LINK)
 }
 
-#copyFilesToDir(some/*.dll, $$DESTDIR/other)
-
 CONFIG(release, debug|release) {
     # code for Release builds
 } else {
@@ -37,8 +36,8 @@ CONFIG(release, debug|release) {
     SOURCES += tests/regApiTest.cpp
     HEADERS += tests/regapitest.h
 
-#    removeDirRecursive($$OUT_PWD/plugins)
-#    copyFilesToDir($$PWD/DistPkg, $$OUT_PWD)
+    removeDirRecursive($$OUT_PWD/plugins)
+    copyFilesToDir($$PWD/DistPkg, $$OUT_PWD)
 
 #    CONFIG += file_copies
 #    COPIES += plugins
@@ -56,7 +55,7 @@ SOURCES += \
         modelpluginselection.cpp \
         modelsortplugins.cpp \
         plugin.cpp \
-        regapi.cpp
+        plugin_TBP.cpp
 
 RESOURCES += \
     qml.qrc \
@@ -80,4 +79,12 @@ HEADERS += \
     modelpluginselection.h \
     modelsortplugins.h \
     plugin.h \
-    regapi.h
+    plugin_TBP.h
+
+DISTFILES += \
+    DistPkg/plugins/ColorPicker/CP.qml \
+    DistPkg/plugins/ColorPicker/cp.plg \
+    DistPkg/plugins/CustomContextMenu/CCM.qml \
+    DistPkg/plugins/CustomContextMenu/ccm.plg \
+    DistPkg/plugins/TaskBarPosition/TBP.qml \
+    DistPkg/plugins/TaskBarPosition/tbp.plg
