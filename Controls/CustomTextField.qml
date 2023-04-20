@@ -39,16 +39,16 @@ TextField {
 
     states: [
         State {
-            name: 'disabled'
+            name: 'default'
             PropertyChanges { target: rootBG; border.color: ColorThemes.layer_03 }
         },
         State {
             name: 'error'
-            PropertyChanges { target: rootBG; border.color: "#ffb4ab" }
+            PropertyChanges { target: rootBG; border.color: ColorThemes.error }
         },
         State {
             name: 'success'
-            PropertyChanges { target: rootBG; border.color: "#61600f" }
+            PropertyChanges { target: rootBG; border.color: ColorThemes.success }
         }
     ]
 }

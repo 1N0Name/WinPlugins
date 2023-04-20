@@ -6,12 +6,17 @@ import Qt5Compat.GraphicalEffects
 
 import Themes 0.1
 import Texts 0.1
+import Controls 0.1
 
-import "../controls"
+import qml.filetype 1.0
 
 Rectangle {
     id: background
     color: ColorThemes.layer_02
+
+    Connections {
+        target: pluginsApi
+    }
 
     Rectangle {
         color: ColorThemes.layer_01
@@ -38,6 +43,7 @@ Rectangle {
 
             CustomTextField {
                 id: folderPathInput
+                state: 'default'
                 customPlaceholderText: qsTr("Введите абсолютный путь к папке...")
                 rightPadding: 45
 
@@ -68,7 +74,7 @@ Rectangle {
                     FolderDialog {
                         id: folderDialog
                         currentFolder: ""
-                        onFolderChanged: folderPathInput.text = folder
+                        onFolderChanged: folderPathInput.text = folder.toString().replace("file:///","")
                     }
                 }
 
@@ -78,6 +84,9 @@ Rectangle {
                     color: folderSourceMA.containsMouse ? ColorThemes.activeIcon : ColorThemes.inActiveIcon
                     antialiasing: true
                 }
+
+                onTextChanged: folderPathInput.text === '' ? folderPathInput.state = 'default' : pluginsApi.checkIfExists(text, FileType.FOLDER)
+                                                           ? folderPathInput.state = 'success' : folderPathInput.state = 'error'
             }
 
             CustomTextField {
@@ -113,7 +122,7 @@ Rectangle {
                         id: iconDialog
                         currentFile: ""
                         nameFilters: ["Icon files (*.ico)", "PNG files (*.png)"]
-                        onFileChanged: iconPathInput.text = file
+                        onFileChanged: iconPathInput.text = file.toString().replace("file:///","")
                     }
                 }
 
@@ -123,6 +132,9 @@ Rectangle {
                     color: iconSourceMA.containsMouse ? ColorThemes.activeIcon : ColorThemes.inActiveIcon
                     antialiasing: true
                 }
+
+                onTextChanged: iconPathInput.text === '' ? iconPathInput.state = 'default' : pluginsApi.checkIfExists(text, FileType.FILE)
+                                                         ? iconPathInput.state = 'success' : iconPathInput.state = 'error'
             }
 
             RowLayout {
@@ -133,13 +145,12 @@ Rectangle {
                 CustomButton {
                     id: iconRegistryDisplaySwitchBtn
                     text: qsTr("Реестр иконок")
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.alignment: Qt.AlignLeft
-
                     checkable: true
 
                     rightPadding: indicatorIcon.width + leftPadding + 10
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.alignment: Qt.AlignLeft
 
                     Image {
                         id: indicatorIcon
@@ -164,7 +175,11 @@ Rectangle {
 
                     onCheckedChanged: iconRegistryDisplaySwitchBtn.checked ? indicatorIcon.rotation = 180
                                                                            : indicatorIcon.rotation = 0
-                    onClicked: iconRegistryDisplayBG.targetHeight = activeIconsDisplayBG.height
+                    onClicked: {
+                        iconRegistryDisplayBG.targetHeight = activeIconsDisplayBG.height
+                        iconRegistryDisplayBG.state === 'invisible' ? iconRegistryDisplayBG.state = 'visible'
+                                                                    : iconRegistryDisplayBG.state = 'invisible'
+                    }
                 }
 
                 CheckBox {
@@ -175,6 +190,7 @@ Rectangle {
 
                 CustomButton {
                     text: qsTr("Применить")
+                    textAlignment: Qt.AlignHCenter
                     width: 100
 
                     Layout.fillWidth: true
@@ -203,12 +219,10 @@ Rectangle {
                 states: [
                     State {
                         name: 'visible'
-                        when: iconRegistryDisplaySwitchBtn.checked
                         PropertyChanges { target: iconRegistryDisplayBG; Layout.preferredHeight: Math.floor(targetHeight / 2 - 10) }
                     },
                     State {
                         name: 'invisible'
-                        when: !iconRegistryDisplaySwitchBtn.checked
                         PropertyChanges { target: iconRegistryDisplayBG; Layout.preferredHeight: 0 }
                     }
                 ]
@@ -225,14 +239,25 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                ListView {
-                    id: activeIconsDisplay
-                    clip: true
+                ColumnLayout {
+                    spacing: 10
 
                     anchors.fill: parent
-                    anchors.leftMargin: 10
-                    anchors.rightMargin: 5
-                    anchors.topMargin: 10
+                    anchors.margins: 10
+
+                    RegularText {
+                        text: qsTr("Список изменений")
+                        color: ColorThemes.highEmphasisText
+                        Layout.fillWidth: true
+                    }
+
+                    ListView {
+                        id: activeIconsDisplay
+                        clip: true
+
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                    }
                 }
             }
         }

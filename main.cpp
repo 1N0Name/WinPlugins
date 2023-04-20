@@ -4,13 +4,16 @@
 #include <QLoggingCategory>
 #include <QQuickStyle>
 
-#include "appcore.h"
-#include "modelpluginselection.h"
-#include "modelsortplugins.h"
+#include "lib/appcore.h"
+#include "lib/pluginsapi.h"
+#include "lib/modelpluginselection.h"
+#include "lib/modelsortplugins.h"
 
 #ifdef PR_UNITS
     #include "tests/regapitest.h"
 #endif
+
+using namespace Qt::Literals::StringLiterals;
 
 int main(int argc, char *argv[])
 {
@@ -43,6 +46,11 @@ int main(int argc, char *argv[])
     Appcore appcore;
     engine.rootContext()->setContextProperty("appcore", &appcore);
 
+    qmlRegisterUncreatableType<PluginsApi>("qml.filetype", 1, 0, "FileType",
+                                            "Not creatable as it is an enum type.");
+    PluginsApi pluginsApi;
+    engine.rootContext()->setContextProperty("pluginsApi", &pluginsApi);
+
     ModelPluginSelection plugins;
     //plugins.updateFromFileSystem();
     plugins.populate(5);
@@ -57,8 +65,8 @@ int main(int argc, char *argv[])
     return 0;
 #endif
 
-    engine.addImportPath("qrc:/");
-    const QUrl url(u"qrc:/main.qml"_qs);
+    engine.addImportPath(":/");
+    const QUrl url(u"qrc:/WinPlugins/qml/main.qml"_s);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)

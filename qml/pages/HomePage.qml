@@ -5,8 +5,7 @@ import Qt5Compat.GraphicalEffects
 
 import Themes 0.1
 import Texts 0.1
-
-import "../controls/"
+import Controls 0.1
 
 ColumnLayout {
     id: root
@@ -385,8 +384,9 @@ ColumnLayout {
                     }
 
                     onClicked: {
-                        pluginPage.pluginPath = settingsPath
-                        stackLayout.currentIndex = 1
+                        pluginPage.pluginPath                   = settingsPath
+                        sideMenuBtnGroup.buttons[1].checked     = true
+                        stackLayout.currentIndex                = 1
                     }
                 }
 

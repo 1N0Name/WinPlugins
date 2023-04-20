@@ -11,5 +11,4 @@
         <file alias="folder.svg">assets/images/plugins/folder.svg</file>
         <file alias="image.svg">assets/images/plugins/image.svg</file>
     </qresource>
-    <qresource prefix="/icons"/>
 </RCC>

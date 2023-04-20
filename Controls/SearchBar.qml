@@ -35,7 +35,7 @@ TextField {
 
     Image {
         id: textFieldIcon
-        source: "qrc:/search.svg"
+        source:                                                 "qrc:/search.svg"
         sourceSize:                                             Qt.size(15, 15)
         antialiasing: true
         fillMode:                                               Image.PreserveAspectFit
