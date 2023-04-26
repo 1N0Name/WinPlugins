@@ -1,12 +1,12 @@
 {
     "plugin": {
         "name": "IconChanger",
-        "description": "Some other plugin with long description and something else",
+        "description": "Easily change icons of your folders",
         "version": "1.0",
-        "imgPath": "qrc:/plugin1.png",
+        "imgPath": "qrc://Plugins/IconChanger/assets/iconChangerLogo.png",
         "storePath": "tempstr",
         "settingsPath": "IconChanger.qml",
-        "price": 8.2,
+        "price": 0,
         "category": "icons"
     }
 }

@@ -96,16 +96,13 @@ ColumnLayout {
 
             clip: true
 
-            readonly property int defaultCellWidth: 250
-            readonly property int defaultCellHeight: 225
+            readonly property int defaultCellWidth: 325
+            readonly property int defaultCellHeight: 275
 
-            cellWidth: Math.floor(width / Math.floor(width / defaultCellWidth))
-            cellHeight: Math.floor((cellWidth / defaultCellWidth) * defaultCellHeight)
-
-            onWidthChanged: {
-                cellWidth: Math.floor(width / Math.floor(width / defaultCellWidth))
-                cellHeight: Math.floor((cellWidth / defaultCellWidth) * defaultCellHeight)
-            }
+            cellWidth: (width / defaultCellWidth >= 3) ? Math.floor(width / Math.floor(width / defaultCellWidth))
+                                                       : defaultCellWidth
+            cellHeight: (width / defaultCellWidth >= 3) ? Math.floor((cellWidth / defaultCellWidth) * defaultCellHeight)
+                                                        : defaultCellHeight
 
             ScrollBar.vertical: ScrollBar {
                 id: vbar

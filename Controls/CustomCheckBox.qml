@@ -7,39 +7,34 @@ import Texts 0.1
 CheckBox {
     id: root
 
-//    indicator: Rectangle {
-//        implicitWidth: root.width
-//        implicitHeight: root.height
+    indicator: Rectangle {
+        id: indicator
+        implicitWidth: 20
+        implicitHeight: 20
+        color: "#00ffffff"
+        border.color: ColorThemes.activeIcon
+        radius: 5
 
-//        x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding + (control.availableWidth - width) / 2
-//        y: control.topPadding + (control.availableHeight - height) / 2
+        Image {
+            id: tick
+            source: "qrc:/tick.svg"
+            sourceSize: Qt.size(indicator.implicitWidth, indicator.implicitHeight)
+            antialiasing: true
+        }
 
-//        color: control.down ? control.palette.light : control.palette.base
-//        border.width: control.visualFocus ? 2 : 1
-//        border.color: control.visualFocus ? control.palette.highlight : control.palette.mid
+        PropertyAnimation {
+            target: tick
+            property: "opacity"
+            from: 1
+            to: 0
+            duration: 500
+        }
+    }
 
-//        ColorImage {
-//            x: (parent.width - width) / 2
-//            y: (parent.height - height) / 2
-//            defaultColor: "#353637"
-//            color: control.palette.text
-//            source: "qrc:/qt-project.org/imports/QtQuick/Controls/Basic/images/check.png"
-//            visible: control.checkState === Qt.Checked
-//        }
-
-//        Rectangle {
-//            x: (parent.width - width) / 2
-//            y: (parent.height - height) / 2
-//            width: 16
-//            height: 3
-//            color: control.palette.text
-//            visible: control.checkState === Qt.PartiallyChecked
-//        }
-//    }
-
-//    contentItem: RegularText {
-//        color: ColorThemes.highEmphasisText
-//        leftPadding: root.indicator && !root.mirrored ? root.indicator.width + root.spacing : 0
-//        rightPadding: root.indicator && root.mirrored ? v.indicator.width + root.spacing : 0
-//    }
+    contentItem: RegularText {
+        text: root.text
+        color: ColorThemes.highEmphasisText
+        leftPadding: root.indicator && !root.mirrored ? root.indicator.width + root.spacing : 0
+        rightPadding: root.indicator && root.mirrored ? v.indicator.width + root.spacing : 0
+    }
 }

@@ -59,18 +59,27 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${PROJECT_SOURCE_DIR}/Plugins
         ${PROJECT_BINARY_DIR}/plugins
-        COMMENT "Copying plugins into binary directory")
-    add_dependencies(${EXECUTABLE_NAME} copy_plugins)
+        DEPENDS ${MY_TARGET})
+
+    file(GLOB PLUGIN_DIRECTORIES RELATIVE ${CMAKE_SOURCE_DIR} Plugins/*)
+    foreach(DIR ${PLUGIN_DIRECTORIES})
+        if(IS_DIRECTORY ${DIR})
+            message(STATUS "DIR - ${DIR}")
+            add_subdirectory(${DIR})
+        endif()
+    endforeach()
 endif()
 
 target_link_libraries(${EXECUTABLE_NAME}
+    PRIVATE Qt6::Core
     PRIVATE Qt6::Gui
     PRIVATE Qt6::Quick
-    PRIVATE Qt6::QuickControls2
-    PRIVATE Qt6::Core
+    PRIVATE Qt6::QuickControls2   
     PRIVATE ThemesLibplugin
     PRIVATE TextsLibplugin
     PRIVATE ControlsLibplugin
+    PRIVATE IconChangerLibplugin
+    PRIVATE CustomContextMenuLibplugin
 )
 
 install(TARGETS ${EXECUTABLE_NAME}

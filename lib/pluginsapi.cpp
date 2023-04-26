@@ -1,23 +1,22 @@
-#include <stdexcept>
-#include <QLoggingCategory>
-#include <QFileInfo>
 #include <QDebug>
+#include <QFileInfo>
+#include <QLoggingCategory>
+#include <stdexcept>
 
 #include "pluginsapi.h"
 
-#define debug(x) qDebug() << #x << " is " << x
-
-PluginsApi::PluginsApi(QObject *parent): QObject(parent) { }
+PluginsApi::PluginsApi(QObject* parent)
+    : QObject(parent) {}
 
 void PluginsApi::writeKey(HKEY key)
 {
     qCritical() << "Function" << __FUNCTION__ << "is not yet implemented";
 }
 
-const bool PluginsApi::checkIfExists(const QString& path, const FileType& fileType) const {
-    if (fileType == FileType::FILE) {
+bool PluginsApi::checkIfExists(const QString& path, const FileType& fileType)
+{
+    if (fileType == FileType::FILE)
         return QFileInfo::exists(path) && QFileInfo(path).isFile();
-    } else {
+    else
         return QFileInfo::exists(path) && !QFileInfo(path).isFile();
-    }
 }

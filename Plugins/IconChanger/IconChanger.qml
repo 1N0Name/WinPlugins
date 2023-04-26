@@ -7,8 +7,8 @@ import Qt5Compat.GraphicalEffects
 import Themes 0.1
 import Texts 0.1
 import Controls 0.1
-
-import qml.filetype 1.0
+import IconChanger 0.1
+import filetype 1.0
 
 Rectangle {
     id: background
@@ -43,7 +43,6 @@ Rectangle {
 
             CustomTextField {
                 id: folderPathInput
-                state: 'default'
                 customPlaceholderText: qsTr("Введите абсолютный путь к папке...")
                 rightPadding: 45
 
@@ -51,7 +50,7 @@ Rectangle {
 
                 Image {
                     id: folderSource
-                    source: "qrc:/folder.svg"
+                    source: "qrc://Plugins/IconChanger/assets/folder.svg"
                     sourceSize: Qt.size(30, 30)
 
                     CustomToolTip {
@@ -85,7 +84,7 @@ Rectangle {
                     antialiasing: true
                 }
 
-                onTextChanged: folderPathInput.text === '' ? folderPathInput.state = 'default' : pluginsApi.checkIfExists(text, FileType.FOLDER)
+                onTextChanged: folderPathInput.text === '' ? folderPathInput.state = 'active' : pluginsApi.checkIfExists(text, FileType.FOLDER)
                                                            ? folderPathInput.state = 'success' : folderPathInput.state = 'error'
             }
 
@@ -98,7 +97,7 @@ Rectangle {
 
                 Image {
                     id: iconSource
-                    source: "qrc:/image.svg"
+                    source: "qrc://Plugins/IconChanger/assets/icon.svg"
                     sourceSize: Qt.size(30, 30)
 
                     CustomToolTip {
@@ -182,7 +181,7 @@ Rectangle {
                     }
                 }
 
-                CheckBox {
+                CustomCheckBox {
                     text: qsTr("Запомнить в реестре")
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -200,18 +199,74 @@ Rectangle {
             Rectangle {
                 id: iconRegistryDisplayBG
                 color: ColorThemes.layer_03
+                clip: true
                 radius: 10
                 state: 'invisible'
                 Layout.fillWidth: true
 
+                IconModel {
+                    id: iconModel
+                }
+
                 GridView {
                     id: iconRegistryDisplay
-                    clip: true
+
+                    property int iconSize: 64
+
+                    cellWidth: iconSize + 10
+                    cellHeight: iconSize + 10
 
                     anchors.fill: parent
                     anchors.leftMargin: 10
                     anchors.rightMargin: 5
                     anchors.topMargin: 10
+
+                    model: iconModel
+
+                    delegate: Rectangle {
+                        id: repositoryIcon
+                        color: ColorThemes.layer_04
+                        radius: 5
+                        width: iconRegistryDisplay.iconSize
+                        height: iconRegistryDisplay.iconSize
+
+                        Image {
+                            id: repositoryIconPreview
+                            source: icon
+                            fillMode: Image.PreserveAspectCrop
+                            anchors.fill: parent
+                            anchors.margins: 5
+                        }
+
+                        Image {
+                            id: delBtn
+                            source: "qrc://Plugins/IconChanger/assets/delete.svg"
+                            sourceSize: Qt.size(15, 15)
+                            anchors.right: repositoryIcon.right
+                            anchors.top: repositoryIcon.top
+                            anchors.rightMargin: Math.floor(width / 2 * -1)
+                            anchors.topMargin: Math.floor(height / 2 * -1)
+
+                            MouseArea {
+                                anchors.fill: parent
+                                enabled: false
+                                cursorShape: Qt.PointingHandCursor
+                            }
+                        }
+
+                        ColorOverlay {
+                            anchors.fill: delBtn
+                            source: delBtn
+                            color: ColorThemes.highEmphasisText
+                            antialiasing: true
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: iconPathInput.text = repositoryIconPreview.source.toString().replace("file:///","")
+                        }
+                    }
                 }
 
                 property int targetHeight

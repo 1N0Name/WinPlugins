@@ -2,15 +2,15 @@
 #define PLUGIN_H
 
 #include <QObject>
-
-#include "qvariant.h"
+#include <QVariant>
 
 class Plugin
 {
 public:
-    Plugin(const QString &name, const QString &description, const QVariant &version,
-           const QString &imgPath, const QString &storePath, const QString &settingsPath,
-           const double &price, const QString &category);
+    Plugin(const QString& name, const QString& description,
+        const QVariant& version, const QString& imgPath,
+        const QString& storePath, const QString& settingsPath,
+        const double& price, const QString& category);
 
     QString getName() const { return m_name; };
     QString getDescription() const { return m_description; };
@@ -20,6 +20,7 @@ public:
     QString getSettingsPath() const { return m_settingsPath; };
     double getPrice() const { return m_price; };
     QString getCategory() const { return m_category; };
+
 private:
     QString m_name;
     QString m_description;
