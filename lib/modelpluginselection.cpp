@@ -1,16 +1,17 @@
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <direct.h>
+#include <QDirIterator>
+#include <QFile>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QJsonArray>
-#include <QFile>
-#include <QDirIterator>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "modelpluginselection.h"
+#include "pluginsapi.h"
 
-ModelPluginSelection::ModelPluginSelection(QObject *parent){}
+ModelPluginSelection::ModelPluginSelection(QObject* parent) {}
 
 QHash<int, QByteArray> ModelPluginSelection::roleNames() const
 {
@@ -26,37 +27,37 @@ QHash<int, QByteArray> ModelPluginSelection::roleNames() const
     return roles;
 }
 
-int ModelPluginSelection::rowCount(const QModelIndex &parent) const
+int ModelPluginSelection::rowCount(const QModelIndex& parent) const
 {
     return m_plugins.size();
 }
 
-int ModelPluginSelection::columnCount(const QModelIndex &parent) const
+int ModelPluginSelection::columnCount(const QModelIndex& parent) const
 {
     return MODEL_PLUGINS_COLUMN_COUNT;
 }
 
-QVariant ModelPluginSelection::data(const QModelIndex &index, int role) const
+QVariant ModelPluginSelection::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
 
-    const Plugin &plg = m_plugins[index.row()];
-    if(role == NameRole)
+    const Plugin& plg = m_plugins[index.row()];
+    if (role == NameRole)
         return plg.getName();
-    if(role == DescriptionRole)
+    if (role == DescriptionRole)
         return plg.getDescription();
-    if(role == VersionRole)
+    if (role == VersionRole)
         return plg.getVersion();
-    if(role == ImgPathRole)
+    if (role == ImgPathRole)
         return plg.getImgPath();
-    if(role == StorePathRole)
+    if (role == StorePathRole)
         return plg.getStorePath();
-    if(role == SettingsPathRole)
+    if (role == SettingsPathRole)
         return plg.getSettingsPath();
-    if(role == PriceRole)
+    if (role == PriceRole)
         return plg.getPrice();
-    if(role == CategoryRole)
+    if (role == CategoryRole)
         return plg.getCategory();
 
     return QVariant();
@@ -92,22 +93,7 @@ bool ModelPluginSelection::isEmpty() const
     return m_plugins.empty();
 }
 
-[[nodiscard]]inline int dirExists(const char* const path)
-{
-    struct stat info;
-
-    int statRC = stat( path, &info );
-    if( statRC != 0 )
-    {
-        if (errno == ENOENT)  { return 0; }
-        if (errno == ENOTDIR) { return 0; }
-        return -1;
-    }
-
-    return ( info.st_mode & S_IFDIR ) ? 1 : 0;
-}
-
-[[nodiscard]]Plugin getPluginFromJSON(QFile& JSONfile)
+[[nodiscard]] Plugin getPluginFromJSON(QFile& JSONfile)
 {
     QString plgData;
     JSONfile.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -115,41 +101,40 @@ bool ModelPluginSelection::isEmpty() const
     JSONfile.close();
 
     QJsonDocument plgJSON = QJsonDocument::fromJson(plgData.toUtf8());
-    auto rootObj = plgJSON.object();
-    auto plgObj = rootObj.value(QString("plugin")).toObject();
+    auto rootObj          = plgJSON.object();
+    auto plgObj           = rootObj.value(QString("plugin")).toObject();
 
     QFileInfo JSONinfo(JSONfile);
     QString settingsPath = "file:///" + JSONinfo.absolutePath() + "/" + plgObj["settingsPath"].toString();
 
-#ifdef PR_DEBUG
-    qDebug() << "/ --------------------------------- Plugin --------------------------------- /";
-    qDebug() << "Plugin Title:\t" << plgObj["name"].toString();
-    qDebug() << "Description:\t" << plgObj["description"].toString();
-    qDebug() << "Version:\t\t" << plgObj["version"].toString();
-    qDebug() << "Image Preview Path:\t" << plgObj["imgPath"].toString();
-    qDebug() << "Preview Page Path:\t" << plgObj["storePath"].toString();
-    qDebug() << "Settings Page Path:\t" << settingsPath;
-    qDebug() << "Plugin Price:\t" << plgObj["price"].toDouble();
-    qDebug() << "Plugin Category:\t" << plgObj["category"].toString();
-    qDebug() << "/ -------------------------------------------------------------------------- /\n";
-#endif
+    qInfo() << "/ --------------------------------- Plugin --------------------------------- /";
+    qInfo() << "Plugin Title:\t" << plgObj["name"].toString();
+    qInfo() << "Description:\t" << plgObj["description"].toString();
+    qInfo() << "Version:\t\t" << plgObj["version"].toString();
+    qInfo() << "Image Preview Path:\t" << plgObj["imgPath"].toString();
+    qInfo() << "Preview Page Path:\t" << plgObj["storePath"].toString();
+    qInfo() << "Settings Page Path:\t" << settingsPath;
+    qInfo() << "Plugin Price:\t" << plgObj["price"].toDouble();
+    qInfo() << "Plugin Category:\t" << plgObj["category"].toString();
+    qInfo() << "/ -------------------------------------------------------------------------- /\n";
 
-    return Plugin(plgObj["name"].toString(), plgObj["description"].toString(), plgObj["version"].toString(),
-                  plgObj["imgPath"].toString(), plgObj["storePath"].toString(), settingsPath,
-                  plgObj["price"].toDouble(), plgObj["category"].toString());
+    return Plugin(plgObj["name"].toString(), plgObj["description"].toString(),
+        plgObj["version"].toString(), plgObj["imgPath"].toString(),
+        plgObj["storePath"].toString(), settingsPath,
+        plgObj["price"].toDouble(), plgObj["category"].toString());
 }
 
 void ModelPluginSelection::updateFromFileSystem()
 {
     this->clear();
     // TODO: Do we even need this check?
-    if(dirExists("plugins") == 0)
+    if (PluginsApi::checkIfExists("plugins", PluginsApi::FileType::FOLDER))
         _mkdir("plugins");
 
-    QDirIterator it(QDir::currentPath() + "/plugins", {"*.plg"}, QDir::Files, QDirIterator::Subdirectories);
+    QDirIterator it(QDir::currentPath() + "/plugins", { "*.plg" }, QDir::Files,
+        QDirIterator::Subdirectories);
 
-    while(it.hasNext())
-    {
+    while (it.hasNext()) {
         QFile JSONfile(it.next());
         this->append(getPluginFromJSON(JSONfile));
     }
@@ -159,6 +144,7 @@ QList<Plugin> ModelPluginSelection::getPlugins()
 {
     return m_plugins;
 }
+<<<<<<< HEAD
 
 /*void ModelPluginSelection::forceUpdate()
 {
@@ -185,3 +171,5 @@ void ModelPluginSelection::populate(int repeats)
 }
 #endif
 
+=======
+>>>>>>> 3dcee96592fa4b899795c284de0ffc638789b7b1

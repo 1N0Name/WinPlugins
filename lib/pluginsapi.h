@@ -1,8 +1,8 @@
 #ifndef REGAPI_H
 #define REGAPI_H
 
-#include <Windows.h>
 #include <QObject>
+#include <Windows.h>
 
 class PluginsApi : public QObject
 {
@@ -15,14 +15,11 @@ public:
     };
     Q_ENUM(FileType)
 
-    Q_INVOKABLE const bool checkIfExists(const QString&, const FileType&) const;
+    Q_INVOKABLE static bool checkIfExists(const QString&, const FileType&);
 
-    explicit PluginsApi(QObject * parent = nullptr);
+    explicit PluginsApi(QObject* parent = nullptr);
 
     static void writeKey(HKEY key);
-
-private:
-    HKEY m_Hkey;
 };
 
 #endif // REGAPI_H

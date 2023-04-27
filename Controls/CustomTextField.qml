@@ -39,8 +39,12 @@ TextField {
 
     states: [
         State {
-            name: 'default'
-            PropertyChanges { target: rootBG; border.color: ColorThemes.layer_03 }
+            name: 'inActive'
+            PropertyChanges { target: rootBG; border.color: ColorThemes.layer_04 }
+        },
+        State {
+            name: 'active'
+            PropertyChanges { target: rootBG; border.color: ColorThemes.layer_04 }
         },
         State {
             name: 'error'

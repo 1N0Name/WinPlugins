@@ -7,7 +7,7 @@ class Appcore : public QObject
 {
     Q_OBJECT
 public:
-    explicit Appcore(QObject * parent = nullptr);
+    explicit Appcore(QObject* parent = nullptr);
 };
 
 #endif // APPCORE_H
