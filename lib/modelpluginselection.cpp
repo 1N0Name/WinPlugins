@@ -118,8 +118,13 @@ bool ModelPluginSelection::isEmpty() const
     qInfo() << "Plugin Category:\t" << plgObj["category"].toString();
     qInfo() << "/ -------------------------------------------------------------------------- /\n";
 
+    QString imgPath = plgObj["imgPath"].toString();
+    if(!imgPath.contains("qrc"))
+    {
+        imgPath = "file:///" + JSONinfo.absolutePath() + "/" + plgObj["imgPath"].toString();
+    }
     return Plugin(plgObj["name"].toString(), plgObj["description"].toString(),
-        plgObj["version"].toString(), plgObj["imgPath"].toString(),
+        plgObj["version"].toString(), imgPath,
         plgObj["storePath"].toString(), settingsPath,
         plgObj["price"].toDouble(), plgObj["category"].toString());
 }

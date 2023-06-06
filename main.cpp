@@ -50,8 +50,8 @@ int main(int argc, char* argv[])
     engine.rootContext()->setContextProperty("pluginsApi", &pluginsApi);
 
     ModelPluginSelection plugins;
-    //plugins.updateFromFileSystem();
-    plugins.populate(5);
+    plugins.updateFromFileSystem();
+    //plugins.populate(5);
     ModelSortPlugins filteredPlugins;
     filteredPlugins.setSourceModel(&plugins);
 

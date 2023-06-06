@@ -21,7 +21,7 @@ qt_add_resources(IMAGE_RESOURCES images.qrc)
 
 # Collect all the source files in the project and library
 file(GLOB CPP_SOURCES lib/*.cpp tests/*.cpp main.cpp)
-file(GLOB HPP_SOURCES lib/*.h tests/*.h)
+file(GLOB HPP_SOURCES lib/*.h tests/*.h lib/*.hpp)
 
 # Set app icon
 set (WIN32_ICON ${CMAKE_CURRENT_SOURCE_DIR}/assets/WinPlugins.rc)
