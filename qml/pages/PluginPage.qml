@@ -9,7 +9,7 @@ import Controls 0.1
 
 RoundRectangle {
     id: background
-    color: ColorThemes.layer_02
+    color: ColorThemes.transparent
     radius: 10
     radiusCorners: Qt.AlignLeft | Qt.AlignTop
 

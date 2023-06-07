@@ -6,6 +6,7 @@ target_link_libraries(ControlsLib PRIVATE Qt6::Quick)
 list(APPEND MODULE_QML_FILES
     CustomButton.qml CustomCheckBox.qml CustomComboBox.qml CustomTextField.qml
     CustomToolTip.qml RoundRectangle.qml SearchBar.qml SideMenuBtn.qml
+    CustomScrollBar.qml
 )
 
 qt_add_qml_module(ControlsLib

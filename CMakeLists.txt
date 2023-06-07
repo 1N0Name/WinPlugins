@@ -80,7 +80,6 @@ target_link_libraries(${EXECUTABLE_NAME}
     PRIVATE ControlsLibplugin
     PRIVATE IconChangerLibplugin
     PRIVATE CustomContextMenuLibplugin
-    PRIVATE ColorPickerLibplugin
 )
 
 install(TARGETS ${EXECUTABLE_NAME}
