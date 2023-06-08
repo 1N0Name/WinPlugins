@@ -78,8 +78,6 @@ target_link_libraries(${EXECUTABLE_NAME}
     PRIVATE ThemesLibplugin
     PRIVATE TextsLibplugin
     PRIVATE ControlsLibplugin
-    PRIVATE IconChangerLibplugin
-    PRIVATE CustomContextMenuLibplugin
 )
 
 install(TARGETS ${EXECUTABLE_NAME}
