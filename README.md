@@ -25,7 +25,7 @@ WinPlugins is an open-source project, maintained by a group of enthusiastic stud
 
 ## Contributing
 
-Refer to the [Contribution Guidelines](https://github.com/1N0Name/WinPlugins/master/CONTRIBUTING.md) section for detailed instructions on how to contribute to this project.
+Refer to the [Contribution Guidelines](https://github.com/1N0Name/WinPlugins/blob/master/CONTRIBUTING.md) section for detailed instructions on how to contribute to this project.
 
 ## Development
 
@@ -89,4 +89,4 @@ The smallest current tasks are accounted for by Kanban board, but among the larg
 - [ ] Figure out how to make an MSIX package to inherit from the Windows interfaces and interact with and modify system components, such as the context menu.
 
 ## License
-This project is licensed under the terms of the [Apache License 2.0](https://github.com/1N0Name/WinPlugins/master/LICENSE).
+This project is licensed under the terms of the [Apache License 2.0](https://github.com/1N0Name/WinPlugins/blob/master/LICENSE).
